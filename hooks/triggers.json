@@ -1,0 +1,68 @@
+{
+  "code": [
+    "create",
+    "build",
+    "make",
+    "add",
+    "implement",
+    "write",
+    "new",
+    "generate",
+    "component",
+    "hook",
+    "util",
+    "service",
+    "function",
+    "screen",
+    "class",
+    "module",
+    "button",
+    "card",
+    "input",
+    "modal",
+    "form",
+    "api",
+    "handler",
+    "code"
+  ],
+  "package": [
+    "install",
+    "package",
+    "npm",
+    "yarn",
+    "pnpm",
+    "dependency",
+    "dependencies",
+    "upgrade",
+    "update package"
+  ],
+  "structure": [
+    "directory",
+    "folder",
+    "mkdir",
+    "structure",
+    "move",
+    "rename",
+    "reorganize",
+    "refactor structure",
+    "file structure"
+  ],
+  "rules": [
+    "rule",
+    "rules",
+    "claude rule",
+    "add rule",
+    "create rule",
+    "update rule",
+    "modify rule"
+  ],
+  "subagent": [
+    "subagent",
+    "sub agent",
+    "agent",
+    "create agent",
+    "add agent",
+    "new agent"
+  ],
+  "_comment": "Add new triggers here. Keywords are matched case-insensitive against user prompt."
+}
