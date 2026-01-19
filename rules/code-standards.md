@@ -1,4 +1,6 @@
-<!-- SUMMARY: Dynamic, scalable code - no hardcoding, discover don't assume -->
+---
+description: Write dynamic, scalable code. No hardcoding, discover don't assume. Use when writing, creating, or modifying code.
+---
 <!-- TRIGGER: code -->
 # RULE: Code Standards - Dynamic & Scalable
 

@@ -1,15 +1,18 @@
-<!-- SUMMARY: Follow standard format when creating or modifying subagents -->
+---
+description: Template for creating/modifying subagent files. Use when user asks to create, add, or modify an agent.
+---
 <!-- TRIGGER: subagent -->
-# RULE: Subagent Format
+# RULE: Subagent File Format
 
-⚠️ **ACTIVE RULE** - Apply when creating or modifying subagent files.
+⚠️ **ALWAYS-ACTIVE RULE** - Use this template for all subagent files.
 
 ## 🔐 Enforcement
 
-**When creating/modifying subagents, you MUST:**
-1. Use YAML frontmatter with required fields
-2. Keep prompts concise and actionable
-3. Place in `.claude/agents/` directory
+**Every subagent file MUST have:**
+1. YAML frontmatter (name, description, tools, model)
+2. Clear task definition
+3. Output format specification
+4. Rules section
 
 ---
 
@@ -17,47 +20,77 @@
 
 ```markdown
 ---
-name: agent-name
-description: Brief description. When to use this agent proactively.
-tools: Grep, Glob, Read, WebSearch, Bash
-model: haiku
+name: [kebab-case-name]
+description: [CRITICAL - LLM reads this to decide when to suggest this agent. Be specific about triggers and use cases.]
+tools: [Glob, Grep, Read, WebSearch, Bash, Write, Edit]
+model: [haiku|sonnet]
 ---
 
 You are a [role] for [project type].
 
 ## Your Task
 
-1. Step one
-2. Step two
-3. Step three
+[Clear, specific instructions]
+
+## [Context Section]
+
+[Relevant project info if needed]
+
+## Steps
+
+1. [Step 1]
+2. [Step 2]
+3. [Step 3]
 
 ## Output Format
 
-[Expected output structure]
+**Success:**
+\`\`\`
+✅ [result]
+   [details]
+\`\`\`
+
+**Failure/Warning:**
+\`\`\`
+⚠️ [issue]
+   [action needed]
+\`\`\`
 
 ## Rules
 
-- Rule one
-- Rule two
+- [Rule 1]
+- [Rule 2]
+- [Rule 3]
 ```
 
 ---
 
-## Required Fields
+## Frontmatter Fields
 
-| Field | Purpose |
-|-------|---------|
-| `name` | Unique identifier (kebab-case) |
-| `description` | When Claude should delegate to this agent |
-| `tools` | Allowed tools (Grep, Glob, Read, WebSearch, Bash, Write, Edit) |
-| `model` | `haiku` for fast/cheap, `sonnet` for complex |
+| Field | Required | Notes |
+|-------|----------|-------|
+| `name` | ✅ | Kebab-case, unique |
+| `description` | ✅ | **LLM reads this to decide when to suggest agent.** Include: what it does, when to use it, trigger words. |
+| `tools` | ✅ | Available tools |
+| `model` | ✅ | haiku (fast) or sonnet (complex) |
 
 ---
 
-## Best Practices
+## Writing Good Descriptions
 
-- Write clear `description` - Claude uses this to decide when to delegate
-- Limit to 3-4 subagents total per project
-- Use `haiku` model for simple searches
-- Use `sonnet` for complex reasoning
-- Keep prompts focused on one task
+The `description` field is **critical** - an LLM reads it to decide when to suggest this agent.
+
+**Good examples:**
+- `Searches for existing code before creating new components. Use when user asks to create, build, add, or make new code.`
+- `Checks package versions before installation. Use when user mentions npm, install, add package, or dependencies.`
+
+**Bad examples:**
+- `Helps with code` (too vague)
+- `Pre-code checker` (doesn't explain when to use)
+
+---
+
+## Model Selection
+
+- **haiku** - Simple searches, validations, checks
+- **sonnet** - Complex analysis, code generation

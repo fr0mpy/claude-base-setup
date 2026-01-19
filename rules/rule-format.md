@@ -1,72 +1,86 @@
-<!-- SUMMARY: Follow standard format when creating or modifying rules -->
+---
+description: Template for creating/modifying rule files. Use when user asks to create, add, or modify a rule.
+---
 <!-- TRIGGER: rules -->
-# RULE: Rule Format - Standard Structure for All Rules
+# RULE: Rule File Format
 
-⚠️ **ALWAYS-ACTIVE RULE** - Apply when creating or modifying any rule file.
+⚠️ **ALWAYS-ACTIVE RULE** - Use this template for all rule files.
 
 ## 🔐 Enforcement
 
-**When creating/modifying rules, you MUST:**
-1. Follow the exact template below
-2. Keep content concise - no filler words
-3. Use the metadata comments for hook integration
+**Every rule file MUST have:**
+1. YAML frontmatter with `description` field
+2. TRIGGER comment
+3. Clear rule name
+4. Enforcement section
+5. Actionable checks
 
 ---
 
 ## Template
 
 ```markdown
-<!-- SUMMARY: One-line description (max 80 chars) -->
-<!-- TRIGGER: code | package | structure | always -->
-# RULE: Name - Short Description
+---
+description: [What this rule does and when it applies - used by LLM to select rules]
+---
+<!-- TRIGGER: [code|package|structure|always] -->
+# RULE: [Name]
 
-⚠️ **ALWAYS-ACTIVE RULE** - Brief scope statement.
+⚠️ **ALWAYS-ACTIVE RULE** - [when this applies]
 
 ## 🔐 Enforcement
 
-**[When this triggers], you MUST:**
-1. Step one
-2. Step two
-3. Step three
+**For [context], you MUST:**
+1. [Action 1]
+2. [Action 2]
+3. [Action 3]
 
 ---
 
-## What to Check
+## [Main Section]
 
-- Bullet point checks
-- Keep actionable
+| ❌ Don't | ✅ Do |
+|----------|-------|
+| [bad]    | [good]|
+
+---
 
 ## Quick Reference
 
-| Do | Don't |
-|----|-------|
-| Good example | Bad example |
+| Trigger | Action |
+|---------|--------|
+| [when]  | [what] |
 ```
 
 ---
 
-## Metadata Fields
+## Frontmatter Fields
 
-| Field | Values | Purpose |
-|-------|--------|---------|
-| `SUMMARY` | Max 80 chars | Displayed in lightweight mode |
-| `TRIGGER` | `code`, `package`, `structure`, `always` | When hook injects this rule |
+| Field | Required | Notes |
+|-------|----------|-------|
+| `description` | ✅ | LLM reads this to decide when rule applies. Be specific about triggers. |
+
+## TRIGGER Comment
+
+- `code` - Creating/modifying code
+- `package` - Installing dependencies
+- `structure` - File/folder operations
+- `always` - Every prompt
 
 ---
 
 ## Principles
 
-1. **Concise** - No paragraphs explaining why. Just what to do.
-2. **Actionable** - Every line should be a clear instruction.
-3. **Scannable** - Use tables, bullets, code blocks. No walls of text.
-4. **Self-contained** - Rule should work without reading other docs.
+1. **Concise** - No fluff or explanations
+2. **Actionable** - Clear do/don't instructions
+3. **Scannable** - Tables, bullets, formatting
+4. **Self-contained** - No external references needed
 
 ---
 
 ## Anti-Patterns
 
-❌ Long explanations of "why" this rule exists
-❌ Multiple examples when one suffices
-❌ Repeating the same instruction in different words
-❌ Sections that don't add actionable value
-❌ "Philosophy" or "Background" sections
+❌ Long explanations of why
+❌ Multiple examples saying the same thing
+❌ Philosophical background
+❌ Sections that don't instruct

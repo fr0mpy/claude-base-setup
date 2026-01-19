@@ -1,148 +1,102 @@
-#!/usr/bin/env bash
-# Smart Context Injection
-# - Injects behavioral rules
-# - Suggests agents for tasks that would bloat context
-
+#!/bin/bash
 set -euo pipefail
 
-CLAUDE_DIR=""
-CURRENT_DIR="$(pwd)"
-while [[ "$CURRENT_DIR" != "/" ]]; do
-  if [[ -d "$CURRENT_DIR/.claude/rules" ]]; then
-    CLAUDE_DIR="$CURRENT_DIR/.claude"
-    break
-  fi
-  CURRENT_DIR="$(dirname "$CURRENT_DIR")"
-done
+# Read prompt from stdin
+PROMPT=$(cat)
 
-[[ -z "$CLAUDE_DIR" ]] && exit 0
+# Find .claude directory
+find_claude_dir() {
+    local dir="$PWD"
+    while [[ "$dir" != "/" ]]; do
+        if [[ -d "$dir/.claude" ]]; then
+            echo "$dir/.claude"
+            return 0
+        fi
+        dir="$(dirname "$dir")"
+    done
+    return 1
+}
+
+CLAUDE_DIR=$(find_claude_dir) || exit 0
 
 RULES_DIR="$CLAUDE_DIR/rules"
-AGENTS_DIR="$CLAUDE_DIR/agents"
 TRIGGERS_FILE="$CLAUDE_DIR/hooks/triggers.json"
 
-# ============================================================================
-# FUNCTIONS
-# ============================================================================
+# Check if rules directory exists
+[[ -d "$RULES_DIR" ]] || exit 0
+[[ -f "$TRIGGERS_FILE" ]] || exit 0
 
-get_summary() {
-  head -1 "$1" 2>/dev/null | grep '<!-- SUMMARY:' | sed 's/.*<!-- SUMMARY: //;s/ -->$//' || echo ""
-}
-
-get_trigger() {
-  head -2 "$1" 2>/dev/null | grep '<!-- TRIGGER:' | sed 's/.*<!-- TRIGGER: //;s/ -->$//' || echo "always"
-}
-
-get_rule_name() {
-  basename "$1" .md | tr '-' ' ' | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) substr($i,2)}1'
-}
-
-get_agent_name() {
-  grep '^name:' "$1" 2>/dev/null | sed 's/name: *//' || basename "$1" .md
-}
-
-get_agent_desc() {
-  grep '^description:' "$1" 2>/dev/null | sed 's/description: *//' | head -c 80 || echo ""
-}
-
-parse_json_array() {
-  local trigger="$1"
-  local in_array=0
-  local keywords=""
-
-  while IFS= read -r line; do
-    if [[ $in_array -eq 0 ]] && echo "$line" | grep -q "\"$trigger\":"; then
-      in_array=1
-      continue
-    fi
-    if [[ $in_array -eq 1 ]]; then
-      if echo "$line" | grep -q '\]'; then
-        break
-      fi
-      local kw=$(echo "$line" | tr -d '",[] ' | tr -d '\t')
-      [[ -n "$kw" ]] && keywords="$keywords|$kw"
-    fi
-  done < "$TRIGGERS_FILE"
-
-  echo "$keywords" | sed 's/^|//'
-}
-
-# ============================================================================
-# MAIN
-# ============================================================================
-
-PROMPT=""
-[[ ! -t 0 ]] && PROMPT=$(cat)
+# Lowercase the prompt for matching
 PROMPT_LOWER=$(echo "$PROMPT" | tr '[:upper:]' '[:lower:]')
 
-MATCHED_TRIGGERS=""
+# Function to check if any keyword matches
+check_trigger() {
+    local trigger_name="$1"
+    local keywords
+    keywords=$(jq -r ".$trigger_name[]" "$TRIGGERS_FILE" 2>/dev/null) || return 1
 
-if [[ -f "$TRIGGERS_FILE" ]]; then
-  TRIGGER_NAMES=$(grep '": \[' "$TRIGGERS_FILE" | grep -v '_comment' | sed 's/.*"\([^"]*\)".*/\1/')
+    while IFS= read -r keyword; do
+        if [[ "$PROMPT_LOWER" == *"$keyword"* ]]; then
+            return 0
+        fi
+    done <<< "$keywords"
+    return 1
+}
 
-  for trigger in $TRIGGER_NAMES; do
-    KEYWORDS=$(parse_json_array "$trigger")
-    if [[ -n "$KEYWORDS" ]] && echo "$PROMPT_LOWER" | grep -qiE "$KEYWORDS"; then
-      MATCHED_TRIGGERS="$MATCHED_TRIGGERS $trigger"
+# Collect matched triggers
+MATCHED_TRIGGERS=()
+
+for trigger in code package structure rules subagent; do
+    if check_trigger "$trigger"; then
+        MATCHED_TRIGGERS+=("$trigger")
     fi
-  done
+done
+
+# Collect active rules - ALWAYS include "always" trigger rules
+ACTIVE_RULES=()
+for rule_file in "$RULES_DIR"/*.md; do
+    [[ -f "$rule_file" ]] || continue
+    RULE_TRIGGER=$(grep -m1 "<!-- TRIGGER:" "$rule_file" 2>/dev/null | sed 's/.*TRIGGER: *\([^-]*\) *-->.*/\1/' | tr -d ' ')
+    RULE_NAME=$(basename "$rule_file" .md)
+
+    # Always include "always" trigger rules
+    if [[ "$RULE_TRIGGER" == "always" ]]; then
+        ACTIVE_RULES+=("$RULE_NAME")
+    # Include rules matching keyword triggers
+    elif [[ ${#MATCHED_TRIGGERS[@]} -gt 0 ]]; then
+        for matched in "${MATCHED_TRIGGERS[@]}"; do
+            if [[ "$RULE_TRIGGER" == "$matched" ]]; then
+                ACTIVE_RULES+=("$RULE_NAME")
+                break
+            fi
+        done
+    fi
+done
+
+# Collect suggested agents
+SUGGESTED_AGENTS=()
+for trigger in "${MATCHED_TRIGGERS[@]}"; do
+    case "$trigger" in
+        code) SUGGESTED_AGENTS+=("pre-code-check") ;;
+        package) SUGGESTED_AGENTS+=("package-checker") ;;
+        structure) SUGGESTED_AGENTS+=("structure-validator") ;;
+    esac
+done
+
+OUTPUT="<user-prompt-submit-hook>\n"
+
+if [[ ${#ACTIVE_RULES[@]} -gt 0 ]]; then
+    OUTPUT+="📋 Rules: $(IFS=,; echo "${ACTIVE_RULES[*]}")\n"
+else
+    OUTPUT+="📋 Rules: none\n"
 fi
 
-MATCHED_TRIGGERS=$(echo "$MATCHED_TRIGGERS" | sed 's/^ //')
-
-# ============================================================================
-# OUTPUT
-# ============================================================================
-
-echo "<context_injection>"
-
-# Rules status
-echo "RULES:"
-for f in "$RULES_DIR"/*.md; do
-  [[ ! -f "$f" ]] && continue
-  local_summary=$(get_summary "$f")
-  local_trigger=$(get_trigger "$f")
-  [[ -z "$local_summary" ]] && continue
-
-  if echo " $MATCHED_TRIGGERS " | grep -q " $local_trigger "; then
-    echo "✅ $(get_rule_name "$f")"
-  else
-    echo "◽ $(get_rule_name "$f")"
-  fi
-done
-
-# Agent suggestions based on triggers
-SUGGESTED_AGENTS=""
-for trigger in $MATCHED_TRIGGERS; do
-  case "$trigger" in
-    code) SUGGESTED_AGENTS="$SUGGESTED_AGENTS pre-code-check" ;;
-    package) SUGGESTED_AGENTS="$SUGGESTED_AGENTS package-checker" ;;
-    structure) SUGGESTED_AGENTS="$SUGGESTED_AGENTS structure-validator" ;;
-  esac
-done
-
-if [[ -n "$SUGGESTED_AGENTS" ]]; then
-  echo ""
-  echo "USE AGENTS:"
-  for agent in $SUGGESTED_AGENTS; do
-    agent_file="$AGENTS_DIR/${agent}.md"
-    if [[ -f "$agent_file" ]]; then
-      echo "🤖 $agent: $(get_agent_desc "$agent_file")"
-    fi
-  done
+if [[ ${#SUGGESTED_AGENTS[@]} -gt 0 ]]; then
+    OUTPUT+="🤖 Agents: $(IFS=,; echo "${SUGGESTED_AGENTS[*]}")\n"
+else
+    OUTPUT+="🤖 Agents: none\n"
 fi
 
-echo "</context_injection>"
+OUTPUT+="</user-prompt-submit-hook>"
 
-# Inject full rules only for matched behavioral triggers
-for trigger in $MATCHED_TRIGGERS; do
-  for f in "$RULES_DIR"/*.md; do
-    [[ ! -f "$f" ]] && continue
-    if [[ "$(get_trigger "$f")" == "$trigger" ]]; then
-      echo ""
-      echo "<${trigger}_rule>"
-      grep -v '^<!-- ' "$f" | head -40
-      echo "</${trigger}_rule>"
-    fi
-  done
-done
+echo -e "$OUTPUT"

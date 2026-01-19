@@ -1,4 +1,6 @@
-<!-- SUMMARY: Announce actions, track agent usage, prevent duplicates -->
+---
+description: Announce all actions with emoji prefixes, track agent usage, prevent duplicate agent runs. Applies to ALL prompts.
+---
 <!-- TRIGGER: always -->
 # RULE: Announce Actions
 
@@ -55,3 +57,5 @@ Before invoking an agent, check if you already used it this turn:
 | Installing packages | `package-checker` first | 1 |
 | File operations | `structure-validator` after | 1 |
 | Session start | `context-loader` | 1 |
+
+---

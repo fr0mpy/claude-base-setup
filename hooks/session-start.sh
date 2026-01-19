@@ -1,79 +1,65 @@
-#!/usr/bin/env bash
-# Session Start Hook
-# - Checks if context is stale
-# - Outputs instruction for Claude to use context-loader agent
-
+#!/bin/bash
 set -euo pipefail
 
-CLAUDE_DIR=""
-CURRENT_DIR="$(pwd)"
-while [[ "$CURRENT_DIR" != "/" ]]; do
-  if [[ -d "$CURRENT_DIR/.claude" ]]; then
-    CLAUDE_DIR="$CURRENT_DIR/.claude"
-    break
-  fi
-  CURRENT_DIR="$(dirname "$CURRENT_DIR")"
-done
+# Find .claude directory (current or parent)
+find_claude_dir() {
+    local dir="$PWD"
+    while [[ "$dir" != "/" ]]; do
+        if [[ -d "$dir/.claude" ]]; then
+            echo "$dir/.claude"
+            return 0
+        fi
+        dir="$(dirname "$dir")"
+    done
+    return 1
+}
 
-[[ -z "$CLAUDE_DIR" ]] && exit 0
+CLAUDE_DIR=$(find_claude_dir) || {
+    echo "<user-prompt-submit-hook>"
+    echo "⚠️ No .claude directory found."
+    echo ""
+    echo "Run the \`context-loader\` agent to generate .claude/CONTEXT.md"
+    echo "</user-prompt-submit-hook>"
+    exit 0
+}
 
 CONTEXT_FILE="$CLAUDE_DIR/CONTEXT.md"
-FRESHNESS_THRESHOLD=3600  # 1 hour in seconds
 
-# ============================================================================
-# FUNCTIONS
-# ============================================================================
-
-is_fresh() {
-  [[ ! -f "$CONTEXT_FILE" ]] && return 1
-
-  local file_age
-  if [[ "$OSTYPE" == "darwin"* ]]; then
-    file_age=$(( $(date +%s) - $(stat -f %m "$CONTEXT_FILE") ))
-  else
-    file_age=$(( $(date +%s) - $(stat -c %Y "$CONTEXT_FILE") ))
-  fi
-
-  [[ $file_age -lt $FRESHNESS_THRESHOLD ]]
-}
-
-get_context_summary() {
-  if [[ -f "$CONTEXT_FILE" ]]; then
-    # Extract quick stats section
-    grep -A5 "## Quick Stats" "$CONTEXT_FILE" 2>/dev/null | tail -4 | sed 's/^/  /'
-  fi
-}
-
-# ============================================================================
-# MAIN
-# ============================================================================
-
-echo "<session_context>"
-
+# Check if CONTEXT.md exists
 if [[ ! -f "$CONTEXT_FILE" ]]; then
-  cat << 'EOF'
-📋 No project context found.
-
-⚠️ ACTION REQUIRED: Use the `context-loader` agent to scan the codebase and generate .claude/CONTEXT.md
-
-This will help you understand the project structure and current implementation status.
-EOF
-
-elif ! is_fresh; then
-  echo "📋 Project context is STALE (>1h old)"
-  echo ""
-  get_context_summary
-  echo ""
-  cat << 'EOF'
-⚠️ ACTION REQUIRED: Use the `context-loader` agent to refresh .claude/CONTEXT.md
-EOF
-
-else
-  echo "📋 Project context loaded (fresh)"
-  echo ""
-  get_context_summary
-  echo ""
-  echo "📁 Full details: .claude/CONTEXT.md"
+    echo "<user-prompt-submit-hook>"
+    echo "⚠️ No project context found."
+    echo ""
+    echo "Run the \`context-loader\` agent to generate .claude/CONTEXT.md"
+    echo "</user-prompt-submit-hook>"
+    exit 0
 fi
 
-echo "</session_context>"
+# Check if context is stale (older than 1 hour)
+if [[ "$(uname)" == "Darwin" ]]; then
+    FILE_AGE=$(( $(date +%s) - $(stat -f %m "$CONTEXT_FILE") ))
+else
+    FILE_AGE=$(( $(date +%s) - $(stat -c %Y "$CONTEXT_FILE") ))
+fi
+
+HOUR_IN_SECONDS=3600
+
+if [[ $FILE_AGE -gt $HOUR_IN_SECONDS ]]; then
+    echo "<user-prompt-submit-hook>"
+    echo "⚠️ Project context is stale ($(( FILE_AGE / 60 )) minutes old)."
+    echo ""
+    echo "Consider running the \`context-loader\` agent to refresh .claude/CONTEXT.md"
+    echo "</user-prompt-submit-hook>"
+    exit 0
+fi
+
+# Extract quick stats from CONTEXT.md
+QUICK_STATS=$(sed -n '/## Quick Stats/,/## /p' "$CONTEXT_FILE" | head -n -1)
+
+echo "<user-prompt-submit-hook>"
+echo "✅ Project context loaded"
+echo ""
+echo "$QUICK_STATS"
+echo ""
+echo "Full context: .claude/CONTEXT.md"
+echo "</user-prompt-submit-hook>"
