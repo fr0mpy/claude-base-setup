@@ -1,0 +1,37 @@
+{
+  "name": "claude-base-setup",
+  "version": "1.0.0",
+  "description": "A reusable .claude configuration for Claude Code projects with smart context injection, rules, and agents",
+  "main": "index.js",
+  "bin": {
+    "claude-base-setup": "./bin/cli.js"
+  },
+  "scripts": {
+    "test": "node test/cli.test.js"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "ai",
+    "llm",
+    "development",
+    "automation",
+    "rules",
+    "agents",
+    "hooks"
+  ],
+  "author": "fr0mpy",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fr0mpy/claude-base-setup.git"
+  },
+  "files": [
+    "bin/",
+    "templates/",
+    "index.js"
+  ],
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

@@ -1,0 +1,174 @@
+{
+  "code": [
+    "create",
+    "build",
+    "make",
+    "add",
+    "implement",
+    "write",
+    "new",
+    "generate",
+    "component",
+    "hook",
+    "util",
+    "service",
+    "function",
+    "screen",
+    "class",
+    "module",
+    "button",
+    "card",
+    "input",
+    "modal",
+    "form",
+    "api",
+    "handler",
+    "code"
+  ],
+  "package": [
+    "install",
+    "package",
+    "npm",
+    "yarn",
+    "pnpm",
+    "dependency",
+    "dependencies",
+    "upgrade",
+    "update package"
+  ],
+  "structure": [
+    "directory",
+    "folder",
+    "mkdir",
+    "structure",
+    "move",
+    "rename",
+    "reorganize",
+    "refactor structure",
+    "file structure"
+  ],
+  "rules": [
+    "rule",
+    "rules",
+    "claude rule",
+    "add rule",
+    "create rule",
+    "update rule",
+    "modify rule"
+  ],
+  "subagent": [
+    "subagent",
+    "sub agent",
+    "agent",
+    "create agent",
+    "add agent",
+    "new agent"
+  ],
+  "command": [
+    "command",
+    "slash command",
+    "create command",
+    "add command",
+    "new command"
+  ],
+  "planning": [
+    "plan",
+    "design",
+    "architect",
+    "approach",
+    "strategy",
+    "how should",
+    "what if",
+    "decide",
+    "choose between"
+  ],
+  "review": [
+    "review",
+    "check",
+    "audit",
+    "analyze",
+    "assess",
+    "evaluate",
+    "look at",
+    "examine"
+  ],
+  "debug": [
+    "debug",
+    "error",
+    "bug",
+    "fix",
+    "broken",
+    "not working",
+    "failing",
+    "crash",
+    "issue",
+    "problem"
+  ],
+  "refactor": [
+    "refactor",
+    "simplify",
+    "clean up",
+    "improve",
+    "optimize",
+    "rewrite",
+    "restructure"
+  ],
+  "test": [
+    "test",
+    "testing",
+    "coverage",
+    "spec",
+    "unit test",
+    "integration test",
+    "e2e"
+  ],
+  "pr": [
+    "pull request",
+    "pr",
+    "merge",
+    "commit",
+    "git"
+  ],
+  "migration": [
+    "migrate",
+    "migration",
+    "upgrade",
+    "schema",
+    "database change",
+    "api version"
+  ],
+  "performance": [
+    "performance",
+    "slow",
+    "fast",
+    "optimize",
+    "speed",
+    "memory",
+    "render"
+  ],
+  "accessibility": [
+    "accessibility",
+    "a11y",
+    "screen reader",
+    "aria",
+    "wcag",
+    "keyboard"
+  ],
+  "session": [
+    "handoff",
+    "continue later",
+    "save progress",
+    "end session",
+    "wrap up",
+    "context"
+  ],
+  "thinking": [
+    "stuck",
+    "confused",
+    "help me think",
+    "rubber duck",
+    "talk through",
+    "explain my problem"
+  ],
+  "_comment": "Add new triggers here. Keywords are matched case-insensitive against user prompt."
+}
