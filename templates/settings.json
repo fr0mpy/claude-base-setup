@@ -34,7 +34,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/smart-inject-rules.sh",
+            "command": ".claude/hooks/smart-inject-llm.sh",
             "statusMessage": "Analyzing prompt..."
           }
         ]

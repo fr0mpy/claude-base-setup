@@ -1,0 +1,16 @@
+{
+  "name": "dev-harness",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Development environment for testing claude-base-setup package",
+  "scripts": {
+    "setup": "node ../bin/cli.js --skip-api-key",
+    "setup:fresh": "node ../bin/cli.js --force --skip-api-key",
+    "setup:with-key": "node ../bin/cli.js",
+    "teardown": "node ../bin/cli.js --remove",
+    "update:agents": "node ../bin/cli.js --update-agents",
+    "update:rules": "node ../bin/cli.js --update-rules",
+    "update:hooks": "node ../bin/cli.js --update-hooks",
+    "update:commands": "node ../bin/cli.js --update-commands"
+  }
+}

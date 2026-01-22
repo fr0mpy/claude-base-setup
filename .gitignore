@@ -1,0 +1,9 @@
+node_modules/
+
+# Dev harness - ignore generated files, keep setup
+dev-harness/.claude/
+dev-harness/.env
+dev-harness/node_modules/
+
+# Test artifacts
+test/test-project/

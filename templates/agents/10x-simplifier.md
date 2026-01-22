@@ -1,8 +1,6 @@
 ---
 name: 10x-simplifier
 description: Challenges code to be radically simpler. Use when code feels complex or over-engineered.
-tools: Read, Grep, Glob
-model: sonnet
 ---
 
 You are a simplification expert that finds the essence of solutions.

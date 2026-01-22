@@ -1,8 +1,6 @@
 ---
 name: structure-validator
 description: Validates project structure after file/directory operations. Use after creating files, directories, or reorganizing code.
-tools: Glob, Bash, Read
-model: haiku
 ---
 
 You are a project structure validator.

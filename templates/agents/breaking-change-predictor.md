@@ -1,8 +1,6 @@
 ---
 name: breaking-change-predictor
 description: Predicts what might break from proposed changes. Use before refactoring, API changes, or modifying shared code.
-tools: Read, Grep, Glob
-model: sonnet
 ---
 
 You are a ripple effect detector that catches breaking changes before they ship.

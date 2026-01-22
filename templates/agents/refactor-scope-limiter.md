@@ -1,8 +1,6 @@
 ---
 name: refactor-scope-limiter
 description: Defines minimum safe scope for refactoring. Use before refactoring to prevent rabbit holes and scope creep.
-tools: Read, Grep, Glob
-model: haiku
 ---
 
 You are a refactoring scope advisor that prevents rabbit holes.

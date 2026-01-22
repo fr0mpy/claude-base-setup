@@ -157,13 +157,20 @@ SUGGESTED_AGENTS=""
 for trigger in $MATCHED_TRIGGERS; do
   case "$trigger" in
     code) SUGGESTED_AGENTS="$SUGGESTED_AGENTS pre-code-check" ;;
-    package) SUGGESTED_AGENTS="$SUGGESTED_AGENTS package-checker" ;;
+    package) SUGGESTED_AGENTS="$SUGGESTED_AGENTS package-checker dependency-detective" ;;
     structure) SUGGESTED_AGENTS="$SUGGESTED_AGENTS structure-validator" ;;
-    planning) SUGGESTED_AGENTS="$SUGGESTED_AGENTS intent-clarifier" ;;
-    debug) SUGGESTED_AGENTS="$SUGGESTED_AGENTS incident-replayer" ;;
-    review) SUGGESTED_AGENTS="$SUGGESTED_AGENTS future-you" ;;
-    refactor) SUGGESTED_AGENTS="$SUGGESTED_AGENTS refactor-scope-limiter" ;;
+    planning) SUGGESTED_AGENTS="$SUGGESTED_AGENTS intent-clarifier assumption-challenger" ;;
+    debug) SUGGESTED_AGENTS="$SUGGESTED_AGENTS incident-replayer error-boundary-designer" ;;
+    review) SUGGESTED_AGENTS="$SUGGESTED_AGENTS future-you scope-creep-detector" ;;
+    refactor) SUGGESTED_AGENTS="$SUGGESTED_AGENTS refactor-scope-limiter 10x-simplifier" ;;
     test) SUGGESTED_AGENTS="$SUGGESTED_AGENTS test-gap-finder" ;;
+    accessibility) SUGGESTED_AGENTS="$SUGGESTED_AGENTS accessibility-auditor" ;;
+    migration) SUGGESTED_AGENTS="$SUGGESTED_AGENTS migration-planner breaking-change-predictor" ;;
+    performance) SUGGESTED_AGENTS="$SUGGESTED_AGENTS performance-profiler" ;;
+    pr) SUGGESTED_AGENTS="$SUGGESTED_AGENTS pr-narrator" ;;
+    session) SUGGESTED_AGENTS="$SUGGESTED_AGENTS session-handoff context-curator" ;;
+    thinking) SUGGESTED_AGENTS="$SUGGESTED_AGENTS rubber-duck devils-advocate" ;;
+    styling) SUGGESTED_AGENTS="$SUGGESTED_AGENTS styling-auditor" ;;
   esac
 done
 
@@ -211,6 +218,18 @@ for trigger in $MATCHED_TRIGGERS; do
       echo "</${trigger}_rule>"
     fi
   done
+done
+
+# Always inject "always" triggered rules (announce-actions, etc.)
+for f in "$RULES_DIR"/*.md; do
+  [[ ! -f "$f" ]] && continue
+  if [[ "$(get_trigger "$f")" == "always" ]]; then
+    rule_basename=$(basename "$f" .md)
+    echo ""
+    echo "<${rule_basename}_rule>"
+    grep -v '^<!-- ' "$f" | head -40
+    echo "</${rule_basename}_rule>"
+  fi
 done
 
 # Always inject lifecycle and context rules for agent operations

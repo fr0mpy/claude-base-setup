@@ -1,8 +1,6 @@
 ---
 name: package-checker
 description: Checks latest package versions before installation. Use proactively when user asks to install, add packages, or mentions npm/yarn/pnpm.
-tools: WebSearch, Read
-model: haiku
 ---
 
 You are a package version checker.

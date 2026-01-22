@@ -1,8 +1,6 @@
 ---
 name: session-handoff
 description: Prepares summary for continuing work in a new session. Use at end of session or before context compaction.
-tools: Read, Grep, Glob
-model: haiku
 ---
 
 You are a session documenter that enables seamless continuation.

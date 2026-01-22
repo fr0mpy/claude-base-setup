@@ -203,6 +203,59 @@ try {
   process.exitCode = 1;
 }
 
+// Test: Skills directory is created with styling skill
+console.log('Test: skills/ directory is created with styling.md');
+setup();
+try {
+  run('--skip-api-key');
+  const skillsDir = path.join(CLAUDE_DIR, 'skills');
+  assert(fs.existsSync(skillsDir), 'skills/ directory should exist');
+
+  const stylingSkill = path.join(skillsDir, 'styling.md');
+  assert(fs.existsSync(stylingSkill), 'skills/styling.md should exist');
+
+  const content = fs.readFileSync(stylingSkill, 'utf8');
+  assert(content.includes('Styling System'), 'Should contain Styling System header');
+  assert(content.includes('styling-config.json'), 'Should reference config file');
+  assert(content.includes('component-recipes'), 'Should reference component recipes');
+  console.log('  ✅ PASSED\n');
+} catch (e) {
+  console.log('  ❌ FAILED:', e.message, '\n');
+  process.exitCode = 1;
+}
+
+// Test: Component recipes directory exists
+console.log('Test: component-recipes/ directory exists with recipes');
+setup();
+try {
+  run('--skip-api-key');
+  const recipesDir = path.join(CLAUDE_DIR, 'component-recipes');
+  assert(fs.existsSync(recipesDir), 'component-recipes/ directory should exist');
+
+  const recipes = fs.readdirSync(recipesDir).filter(f => f.endsWith('.md'));
+  assert(recipes.length > 0, 'Should have at least one recipe');
+  assert(recipes.includes('button.md'), 'Should include button.md');
+  assert(recipes.includes('card.md'), 'Should include card.md');
+  assert(recipes.includes('input.md'), 'Should include input.md');
+  console.log('  ✅ PASSED\n');
+} catch (e) {
+  console.log('  ❌ FAILED:', e.message, '\n');
+  process.exitCode = 1;
+}
+
+// Test: Styling rule no longer exists (migrated to skill)
+console.log('Test: styling-system.md rule does not exist (migrated to skill)');
+setup();
+try {
+  run('--skip-api-key');
+  const oldRulePath = path.join(CLAUDE_DIR, 'rules', 'styling-system.md');
+  assert(!fs.existsSync(oldRulePath), 'styling-system.md rule should not exist');
+  console.log('  ✅ PASSED\n');
+} catch (e) {
+  console.log('  ❌ FAILED:', e.message, '\n');
+  process.exitCode = 1;
+}
+
 // Cleanup
 cleanup();
 

@@ -220,6 +220,36 @@ OUTPUT+="</user-prompt-submit-hook>"
 
 echo -e "$OUTPUT"
 
+# Helper function to get trigger from rule file
+get_trigger() {
+    head -2 "$1" 2>/dev/null | grep '<!-- TRIGGER:' | sed 's/.*<!-- TRIGGER: //;s/ -->$//' || echo "always"
+}
+
+# Always inject "always" triggered rules (announce-actions, etc.)
+for f in "$RULES_DIR"/*.md; do
+    [[ -f "$f" ]] || continue
+    if [[ "$(get_trigger "$f")" == "always" ]]; then
+        rule_basename=$(basename "$f" .md)
+        echo ""
+        echo "<${rule_basename}_rule>"
+        grep -v '^<!-- ' "$f" | head -40
+        echo "</${rule_basename}_rule>"
+    fi
+done
+
+# Inject content of LLM-selected rules
+if [[ -n "$ACTIVE_RULES" ]]; then
+    for rule in $ACTIVE_RULES; do
+        rule_file="$RULES_DIR/${rule}.md"
+        if [[ -f "$rule_file" ]]; then
+            echo ""
+            echo "<${rule}_rule>"
+            grep -v '^<!-- ' "$rule_file" | head -40
+            echo "</${rule}_rule>"
+        fi
+    done
+fi
+
 # Inject lifecycle and context rules for agent operations
 if [[ -n "$SUGGESTED_AGENTS" ]]; then
     if [[ -f "$RULES_DIR/agent-lifecycle-messages.md" ]]; then

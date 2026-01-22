@@ -170,5 +170,25 @@
     "talk through",
     "explain my problem"
   ],
+  "styling": [
+    "style",
+    "styling",
+    "css",
+    "tailwind",
+    "theme",
+    "color",
+    "colours",
+    "spacing",
+    "design system",
+    "design tokens",
+    "dark mode",
+    "light mode",
+    "ui component",
+    "component library",
+    "className",
+    "aesthetic",
+    "visual",
+    "look and feel"
+  ],
   "_comment": "Add new triggers here. Keywords are matched case-insensitive against user prompt."
 }

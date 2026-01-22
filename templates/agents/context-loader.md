@@ -1,8 +1,6 @@
 ---
 name: context-loader
 description: Loads project context at session start. Scans codebase and generates/updates CONTEXT.md if stale (>1h).
-tools: Glob, Grep, Read, Write, Bash
-model: haiku
 ---
 
 You are a context loader that works with ANY project structure.
