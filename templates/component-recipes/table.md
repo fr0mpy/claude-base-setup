@@ -15,7 +15,7 @@ relative w-full overflow-auto
 
 ### Table
 ```
-w-full caption-bottom text-sm
+w-full caption-bottom text-sm font-body
 ```
 
 ### Header
@@ -44,6 +44,11 @@ h-10 px-2 text-left align-middle font-medium text-muted-foreground
 ### Data Cell (td)
 ```
 p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]
+```
+
+### Numeric Cell (for numbers, dates, prices)
+```
+tabular-nums text-right
 ```
 
 ### Caption
@@ -75,7 +80,9 @@ interface TableHeadProps extends React.ThHTMLAttributes<HTMLTableCellElement> {
   onSort?: () => void
 }
 
-interface TableCellProps extends React.TdHTMLAttributes<HTMLTableCellElement> {}
+interface TableCellProps extends React.TdHTMLAttributes<HTMLTableCellElement> {
+  numeric?: boolean  // Adds tabular-nums and text-right for numbers/dates/prices
+}
 
 interface TableCaptionProps extends React.HTMLAttributes<HTMLTableCaptionElement> {}
 ```
@@ -86,6 +93,8 @@ interface TableCaptionProps extends React.HTMLAttributes<HTMLTableCaptionElement
 - Support horizontal scroll for wide tables
 - Use muted colors for headers
 - Align numbers/dates right, text left
+- Use `tabular-nums` class for numeric columns
+- Format dates with `Intl.DateTimeFormat`, numbers with `Intl.NumberFormat`
 
 ## Don't
 - Hardcode colors
@@ -100,7 +109,7 @@ import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react'
 
 const Table = ({ className, ...props }) => (
   <div className="relative w-full overflow-auto">
-    <table className={cn('w-full caption-bottom text-sm', className)} {...props} />
+    <table className={cn('w-full caption-bottom text-sm font-body', className)} {...props} />
   </div>
 )
 
@@ -148,9 +157,13 @@ const TableHead = ({ className, sortable, sortDirection, onSort, children, ...pr
   </th>
 )
 
-const TableCell = ({ className, ...props }) => (
+const TableCell = ({ className, numeric, ...props }) => (
   <td
-    className={cn('p-2 align-middle [&:has([role=checkbox])]:pr-0', className)}
+    className={cn(
+      'p-2 align-middle [&:has([role=checkbox])]:pr-0',
+      numeric && 'tabular-nums text-right',
+      className
+    )}
     {...props}
   />
 )

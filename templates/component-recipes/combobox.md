@@ -88,7 +88,7 @@ interface ComboboxProps {
 ```
 
 ## Do
-- Use Radix Combobox or cmdk for accessibility
+- Use Base UI Combobox or cmdk for accessibility
 - Support type-ahead filtering
 - Clear search on selection (single) or keep (multi)
 - Show loading state while filtering
@@ -112,8 +112,8 @@ const Combobox = ({
   options,
   value,
   onValueChange,
-  placeholder = 'Select option...',
-  searchPlaceholder = 'Search...',
+  placeholder = 'Select option…',
+  searchPlaceholder = 'Search…',
   emptyText = 'No results found.',
 }) => {
   const [open, setOpen] = useState(false)

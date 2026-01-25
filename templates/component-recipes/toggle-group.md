@@ -90,7 +90,7 @@ interface ToggleGroupMultipleProps {
 ```
 
 ## Do
-- Use Radix ToggleGroup primitive
+- Use Base UI ToggleGroup primitive
 - Clearly indicate selected state
 - Support keyboard navigation
 - Include proper ARIA attributes
@@ -104,11 +104,12 @@ interface ToggleGroupMultipleProps {
 
 ## Example
 ```tsx
-import * as ToggleGroupPrimitive from '@radix-ui/react-toggle-group'
+import { ToggleGroup as ToggleGroupBase } from '@base-ui/react/toggle-group'
+import { Toggle as ToggleBase } from '@base-ui/react/toggle'
 import { cn } from '@/lib/utils'
 
 const ToggleGroup = ({ className, variant = 'default', size = 'md', ...props }) => (
-  <ToggleGroupPrimitive.Root
+  <ToggleGroupBase.Root
     className={cn(
       'inline-flex items-center justify-center rounded-lg',
       variant === 'default' && 'bg-muted p-1',
@@ -126,7 +127,7 @@ const toggleGroupItemSizes = {
 }
 
 const ToggleGroupItem = ({ className, variant = 'default', size = 'md', ...props }) => (
-  <ToggleGroupPrimitive.Item
+  <ToggleBase.Root
     className={cn(
       'inline-flex items-center justify-center whitespace-nowrap rounded-md',
       'font-medium ring-offset-background transition-all',
@@ -134,12 +135,12 @@ const ToggleGroupItem = ({ className, variant = 'default', size = 'md', ...props
       'disabled:pointer-events-none disabled:opacity-50',
       variant === 'default' && [
         'text-muted-foreground hover:bg-background/50 hover:text-foreground',
-        'data-[state=on]:bg-background data-[state=on]:text-foreground data-[state=on]:shadow-sm',
+        'data-pressed:bg-background data-pressed:text-foreground data-pressed:shadow-sm',
       ],
       variant === 'outline' && [
         'border-r border-border last:border-r-0',
         'text-muted-foreground hover:bg-muted hover:text-foreground',
-        'data-[state=on]:bg-muted data-[state=on]:text-foreground',
+        'data-pressed:bg-muted data-pressed:text-foreground',
       ],
       toggleGroupItemSizes[size],
       className

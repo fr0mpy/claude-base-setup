@@ -12,7 +12,7 @@
 ```
 z-50 overflow-hidden {tokens.radius} bg-foreground px-3 py-1.5 text-xs text-background
 animate-in fade-in-0 zoom-in-95
-data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95
+data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95
 data-[side=bottom]:slide-in-from-top-2
 data-[side=left]:slide-in-from-right-2
 data-[side=right]:slide-in-from-left-2
@@ -47,7 +47,7 @@ interface TooltipProps {
 - Skip delay on hover when moving between tooltips
 
 ## Do
-- Use Radix Tooltip for accessibility
+- Use Base UI Tooltip for accessibility
 - Include enter/exit animations
 - Support arrow pointing to trigger
 - Use inverted colors (dark bg, light text) for contrast
@@ -60,22 +60,22 @@ interface TooltipProps {
 
 ## Example
 ```tsx
-import * as TooltipPrimitive from '@radix-ui/react-tooltip'
+import { Tooltip } from '@base-ui-components/react/tooltip'
 import { cn } from '@/lib/utils'
 
-const TooltipProvider = TooltipPrimitive.Provider
+const TooltipProvider = Tooltip.Provider
 
-const Tooltip = TooltipPrimitive.Root
+const TooltipRoot = Tooltip.Root
 
-const TooltipTrigger = TooltipPrimitive.Trigger
+const TooltipTrigger = Tooltip.Trigger
 
 const TooltipContent = ({ className, sideOffset = 4, ...props }) => (
-  <TooltipPrimitive.Content
+  <Tooltip.Popup
     sideOffset={sideOffset}
     className={cn(
       'z-50 overflow-hidden rounded-md bg-foreground px-3 py-1.5 text-xs text-background',
       'animate-in fade-in-0 zoom-in-95',
-      'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
+      'data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
       'data-[side=bottom]:slide-in-from-top-2',
       'data-[side=left]:slide-in-from-right-2',
       'data-[side=right]:slide-in-from-left-2',
@@ -87,7 +87,7 @@ const TooltipContent = ({ className, sideOffset = 4, ...props }) => (
 )
 
 const TooltipArrow = ({ className, ...props }) => (
-  <TooltipPrimitive.Arrow
+  <Tooltip.Arrow
     className={cn('fill-foreground', className)}
     {...props}
   />
@@ -96,13 +96,13 @@ const TooltipArrow = ({ className, ...props }) => (
 // Simplified wrapper component
 const SimpleTooltip = ({ content, side = 'top', delayDuration = 200, children }) => (
   <TooltipProvider>
-    <Tooltip delayDuration={delayDuration}>
+    <TooltipRoot delayDuration={delayDuration}>
       <TooltipTrigger asChild>{children}</TooltipTrigger>
       <TooltipContent side={side}>
         {content}
         <TooltipArrow />
       </TooltipContent>
-    </Tooltip>
+    </TooltipRoot>
   </TooltipProvider>
 )
 

@@ -210,7 +210,7 @@ const TextareaField = ({ label, error, errorMessage, id, ...props }) => (
 )
 
 // Usage examples
-<Textarea placeholder="Type your message here..." />
+<Textarea placeholder="Type your message here…" />
 
 <TextareaWithCount
   maxLength={280}
@@ -220,14 +220,14 @@ const TextareaField = ({ label, error, errorMessage, id, ...props }) => (
 />
 
 <AutoResizeTextarea
-  placeholder="Write your comment..."
+  placeholder="Write your comment…"
   minRows={2}
   maxRows={6}
 />
 
 <TextareaField
   label="Description"
-  placeholder="Describe your project..."
+  placeholder="Describe your project…"
   error={!!errors.description}
   errorMessage={errors.description?.message}
 />

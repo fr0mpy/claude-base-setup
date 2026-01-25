@@ -14,9 +14,9 @@
 ```
 z-50 min-w-[8rem] overflow-hidden {tokens.radius} border border-border
 bg-background p-1 text-foreground {tokens.shadow}
-data-[state=open]:animate-in data-[state=closed]:animate-out
-data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0
-data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95
+data-open:animate-in data-closed:animate-out
+data-closed:fade-out-0 data-open:fade-in-0
+data-closed:zoom-out-95 data-open:zoom-in-95
 data-[side=bottom]:slide-in-from-top-2
 data-[side=left]:slide-in-from-right-2
 data-[side=right]:slide-in-from-left-2
@@ -29,7 +29,7 @@ relative flex cursor-pointer select-none items-center {tokens.radius} px-2 py-1.
 text-sm outline-none
 transition-colors
 focus:bg-muted focus:text-foreground
-data-[disabled]:pointer-events-none data-[disabled]:opacity-50
+data-disabled:pointer-events-none data-disabled:opacity-50
 ```
 
 ### Item with Icon
@@ -42,7 +42,7 @@ data-[disabled]:pointer-events-none data-[disabled]:opacity-50
 relative flex cursor-pointer select-none items-center {tokens.radius} py-1.5 pl-8 pr-2
 text-sm outline-none
 focus:bg-muted focus:text-foreground
-data-[disabled]:pointer-events-none data-[disabled]:opacity-50
+data-disabled:pointer-events-none data-disabled:opacity-50
 ```
 
 ### Radio Item
@@ -50,7 +50,7 @@ data-[disabled]:pointer-events-none data-[disabled]:opacity-50
 relative flex cursor-pointer select-none items-center {tokens.radius} py-1.5 pl-8 pr-2
 text-sm outline-none
 focus:bg-muted focus:text-foreground
-data-[disabled]:pointer-events-none data-[disabled]:opacity-50
+data-disabled:pointer-events-none data-disabled:opacity-50
 ```
 
 ### Item Indicator (check/radio)
@@ -60,7 +60,7 @@ absolute left-2 flex h-3.5 w-3.5 items-center justify-center
 
 ### Label
 ```
-px-2 py-1.5 text-sm font-semibold text-foreground
+px-2 py-1.5 font-heading text-sm font-semibold text-foreground
 ```
 
 ### Separator
@@ -78,7 +78,7 @@ ml-auto text-xs tracking-widest text-muted-foreground
 flex cursor-pointer select-none items-center {tokens.radius} px-2 py-1.5
 text-sm outline-none
 focus:bg-muted
-data-[state=open]:bg-muted
+data-open:bg-muted
 ```
 
 ### Sub Content
@@ -123,7 +123,7 @@ interface DropdownMenuRadioItemProps {
 ```
 
 ## Do
-- Use Radix DropdownMenu for accessibility
+- Use Base UI DropdownMenu for accessibility
 - Support keyboard navigation (arrows, enter, escape)
 - Include focus management
 - Support nested submenus
@@ -136,7 +136,7 @@ interface DropdownMenuRadioItemProps {
 
 ## Example
 ```tsx
-import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu'
+import { Menu as DropdownMenuPrimitive } from '@base-ui/react/menu'
 import { Check, ChevronRight, Circle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -153,9 +153,9 @@ const DropdownMenuContent = ({ className, sideOffset = 4, ...props }) => (
       sideOffset={sideOffset}
       className={cn(
         'z-50 min-w-[8rem] overflow-hidden rounded-md border border-border bg-background p-1 shadow-md',
-        'data-[state=open]:animate-in data-[state=closed]:animate-out',
-        'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
-        'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
+        'data-open:animate-in data-closed:animate-out',
+        'data-closed:fade-out-0 data-open:fade-in-0',
+        'data-closed:zoom-out-95 data-open:zoom-in-95',
         'data-[side=bottom]:slide-in-from-top-2',
         className
       )}
@@ -169,7 +169,7 @@ const DropdownMenuItem = ({ className, inset, ...props }) => (
     className={cn(
       'relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none',
       'transition-colors focus:bg-muted focus:text-foreground',
-      'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'data-disabled:pointer-events-none data-disabled:opacity-50',
       inset && 'pl-8',
       className
     )}
@@ -182,7 +182,7 @@ const DropdownMenuCheckboxItem = ({ className, checked, children, ...props }) =>
     className={cn(
       'relative flex cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none',
       'focus:bg-muted focus:text-foreground',
-      'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'data-disabled:pointer-events-none data-disabled:opacity-50',
       className
     )}
     checked={checked}
@@ -202,7 +202,7 @@ const DropdownMenuRadioItem = ({ className, children, ...props }) => (
     className={cn(
       'relative flex cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none',
       'focus:bg-muted focus:text-foreground',
-      'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'data-disabled:pointer-events-none data-disabled:opacity-50',
       className
     )}
     {...props}
@@ -238,7 +238,7 @@ const DropdownMenuSubTrigger = ({ className, inset, children, ...props }) => (
   <DropdownMenuPrimitive.SubTrigger
     className={cn(
       'flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none',
-      'focus:bg-muted data-[state=open]:bg-muted',
+      'focus:bg-muted data-open:bg-muted',
       inset && 'pl-8',
       className
     )}
@@ -253,8 +253,8 @@ const DropdownMenuSubContent = ({ className, ...props }) => (
   <DropdownMenuPrimitive.SubContent
     className={cn(
       'z-50 min-w-[8rem] overflow-hidden rounded-md border border-border bg-background p-1 shadow-lg',
-      'data-[state=open]:animate-in data-[state=closed]:animate-out',
-      'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
+      'data-open:animate-in data-closed:animate-out',
+      'data-closed:fade-out-0 data-open:fade-in-0',
       className
     )}
     {...props}

@@ -19,9 +19,9 @@
 z-50 min-w-[8rem] overflow-hidden {tokens.radius} border border-border
 bg-background p-1 text-foreground {tokens.shadow}
 animate-in fade-in-80
-data-[state=open]:animate-in data-[state=closed]:animate-out
-data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0
-data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95
+data-open:animate-in data-closed:animate-out
+data-closed:fade-out-0 data-open:fade-in-0
+data-closed:zoom-out-95 data-open:zoom-in-95
 data-[side=bottom]:slide-in-from-top-2
 data-[side=left]:slide-in-from-right-2
 data-[side=right]:slide-in-from-left-2
@@ -33,7 +33,7 @@ data-[side=top]:slide-in-from-bottom-2
 relative flex cursor-pointer select-none items-center {tokens.radius} px-2 py-1.5
 text-sm outline-none
 focus:bg-muted focus:text-foreground
-data-[disabled]:pointer-events-none data-[disabled]:opacity-50
+data-disabled:pointer-events-none data-disabled:opacity-50
 ```
 
 ### Item with Inset (for alignment with checkbox items)
@@ -46,7 +46,7 @@ pl-8
 relative flex cursor-pointer select-none items-center {tokens.radius} py-1.5 pl-8 pr-2
 text-sm outline-none
 focus:bg-muted focus:text-foreground
-data-[disabled]:pointer-events-none data-[disabled]:opacity-50
+data-disabled:pointer-events-none data-disabled:opacity-50
 ```
 
 ### Radio Item
@@ -54,7 +54,7 @@ data-[disabled]:pointer-events-none data-[disabled]:opacity-50
 relative flex cursor-pointer select-none items-center {tokens.radius} py-1.5 pl-8 pr-2
 text-sm outline-none
 focus:bg-muted focus:text-foreground
-data-[disabled]:pointer-events-none data-[disabled]:opacity-50
+data-disabled:pointer-events-none data-disabled:opacity-50
 ```
 
 ### Item Indicator
@@ -64,7 +64,7 @@ absolute left-2 flex h-3.5 w-3.5 items-center justify-center
 
 ### Label
 ```
-px-2 py-1.5 text-sm font-semibold text-foreground
+px-2 py-1.5 font-heading text-sm font-semibold text-foreground
 ```
 
 ### Separator
@@ -82,14 +82,14 @@ ml-auto text-xs tracking-widest text-muted-foreground
 flex cursor-pointer select-none items-center {tokens.radius} px-2 py-1.5
 text-sm outline-none
 focus:bg-muted
-data-[state=open]:bg-muted
+data-open:bg-muted
 ```
 
 ### Sub Content
 ```
 z-50 min-w-[8rem] overflow-hidden {tokens.radius} border border-border
 bg-background p-1 {tokens.shadow}
-data-[state=open]:animate-in data-[state=closed]:animate-out
+data-open:animate-in data-closed:animate-out
 ```
 
 ## Props Interface
@@ -122,7 +122,7 @@ interface ContextMenuItemProps {
 ```
 
 ## Do
-- Use Radix ContextMenu for accessibility
+- Use Base UI ContextMenu for accessibility
 - Support all item types (checkbox, radio, sub-menus)
 - Show keyboard shortcuts
 - Handle touch devices (long-press)
@@ -135,7 +135,7 @@ interface ContextMenuItemProps {
 
 ## Example
 ```tsx
-import * as ContextMenuPrimitive from '@radix-ui/react-context-menu'
+import { Menu as ContextMenuPrimitive } from '@base-ui/react/menu'
 import { Check, ChevronRight, Circle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -152,9 +152,9 @@ const ContextMenuContent = ({ className, ...props }) => (
       className={cn(
         'z-50 min-w-[8rem] overflow-hidden rounded-md border border-border bg-background p-1 shadow-md',
         'animate-in fade-in-80',
-        'data-[state=open]:animate-in data-[state=closed]:animate-out',
-        'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
-        'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
+        'data-open:animate-in data-closed:animate-out',
+        'data-closed:fade-out-0 data-open:fade-in-0',
+        'data-closed:zoom-out-95 data-open:zoom-in-95',
         'data-[side=bottom]:slide-in-from-top-2',
         className
       )}
@@ -168,7 +168,7 @@ const ContextMenuItem = ({ className, inset, ...props }) => (
     className={cn(
       'relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none',
       'focus:bg-muted focus:text-foreground',
-      'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'data-disabled:pointer-events-none data-disabled:opacity-50',
       inset && 'pl-8',
       className
     )}
@@ -181,7 +181,7 @@ const ContextMenuCheckboxItem = ({ className, checked, children, ...props }) => 
     className={cn(
       'relative flex cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none',
       'focus:bg-muted focus:text-foreground',
-      'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'data-disabled:pointer-events-none data-disabled:opacity-50',
       className
     )}
     checked={checked}
@@ -201,7 +201,7 @@ const ContextMenuRadioItem = ({ className, children, ...props }) => (
     className={cn(
       'relative flex cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none',
       'focus:bg-muted focus:text-foreground',
-      'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'data-disabled:pointer-events-none data-disabled:opacity-50',
       className
     )}
     {...props}

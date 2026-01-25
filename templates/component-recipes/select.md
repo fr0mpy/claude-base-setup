@@ -21,9 +21,9 @@ disabled:cursor-not-allowed disabled:opacity-50
 ```
 relative z-50 max-h-96 min-w-[8rem] overflow-hidden {tokens.radius}
 border border-border bg-background text-foreground {tokens.shadow}
-data-[state=open]:animate-in data-[state=closed]:animate-out
-data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0
-data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95
+data-open:animate-in data-closed:animate-out
+data-closed:fade-out-0 data-open:fade-in-0
+data-closed:zoom-out-95 data-open:zoom-in-95
 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2
 ```
 
@@ -37,7 +37,7 @@ p-1 max-h-[300px] overflow-y-auto
 relative flex w-full cursor-pointer select-none items-center {tokens.radius} py-1.5 pl-8 pr-2
 text-sm outline-none
 focus:bg-surface focus:text-foreground
-data-[disabled]:pointer-events-none data-[disabled]:opacity-50
+data-disabled:pointer-events-none data-disabled:opacity-50
 ```
 
 ### Selected Indicator
@@ -78,7 +78,7 @@ interface SelectGroupProps {
 ```
 
 ## Do
-- Use Radix Select for accessibility
+- Use Base UI Select for accessibility
 - Show checkmark for selected item
 - Include chevron icon on trigger
 - Support keyboard navigation
@@ -92,7 +92,7 @@ interface SelectGroupProps {
 
 ## Example
 ```tsx
-import * as SelectPrimitive from '@radix-ui/react-select'
+import { Select as SelectPrimitive } from '@base-ui/react/select'
 import { Check, ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -138,7 +138,7 @@ const SelectItem = ({ className, children, ...props }) => (
     className={cn(
       'relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm',
       'outline-none focus:bg-surface',
-      'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'data-disabled:pointer-events-none data-disabled:opacity-50',
       className
     )}
     {...props}

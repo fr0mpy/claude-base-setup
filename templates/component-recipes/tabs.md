@@ -20,7 +20,7 @@ text-sm font-medium ring-offset-background
 transition-all
 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2
 disabled:pointer-events-none disabled:opacity-50
-data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:{tokens.shadow}
+data-active:bg-background data-active:text-foreground data-active:{tokens.shadow}
 ```
 
 ### Tab Content
@@ -36,7 +36,7 @@ border-b border-border
 
 Tab Trigger:
 border-b-2 border-transparent pb-3 pt-2
-data-[state=active]:border-primary data-[state=active]:text-foreground
+data-active:border-primary data-active:text-foreground
 ```
 
 ### Alternative: Pills Style
@@ -46,7 +46,7 @@ flex gap-2
 
 Tab Trigger:
 rounded-full px-4 py-2
-data-[state=active]:bg-primary data-[state=active]:text-primary-foreground
+data-active:bg-primary data-active:text-primary-foreground
 ```
 
 ## Props Interface
@@ -78,7 +78,7 @@ interface TabsContentProps {
 ```
 
 ## Do
-- Use Radix Tabs for accessibility
+- Use Base UI Tabs for accessibility
 - Support keyboard navigation (arrow keys)
 - Include focus ring for triggers
 - Use subtle background for active state
@@ -91,13 +91,13 @@ interface TabsContentProps {
 
 ## Example
 ```tsx
-import * as TabsPrimitive from '@radix-ui/react-tabs'
+import { Tabs } from '@base-ui-components/react/tabs'
 import { cn } from '@/lib/utils'
 
-const Tabs = TabsPrimitive.Root
+const TabsRoot = Tabs.Root
 
 const TabsList = ({ className, ...props }) => (
-  <TabsPrimitive.List
+  <Tabs.List
     className={cn(
       'inline-flex h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground',
       className
@@ -107,13 +107,13 @@ const TabsList = ({ className, ...props }) => (
 )
 
 const TabsTrigger = ({ className, ...props }) => (
-  <TabsPrimitive.Trigger
+  <Tabs.Tab
     className={cn(
       'inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1',
       'text-sm font-medium ring-offset-background transition-all',
       'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
       'disabled:pointer-events-none disabled:opacity-50',
-      'data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm',
+      'data-active:bg-background data-active:text-foreground data-active:shadow-sm',
       className
     )}
     {...props}
@@ -121,7 +121,7 @@ const TabsTrigger = ({ className, ...props }) => (
 )
 
 const TabsContent = ({ className, ...props }) => (
-  <TabsPrimitive.Content
+  <Tabs.Panel
     className={cn(
       'mt-2 ring-offset-background',
       'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
@@ -132,7 +132,7 @@ const TabsContent = ({ className, ...props }) => (
 )
 
 // Usage
-<Tabs defaultValue="account">
+<TabsRoot defaultValue="account">
   <TabsList>
     <TabsTrigger value="account">Account</TabsTrigger>
     <TabsTrigger value="password">Password</TabsTrigger>
@@ -141,5 +141,5 @@ const TabsContent = ({ className, ...props }) => (
   <TabsContent value="account">Account settings...</TabsContent>
   <TabsContent value="password">Password settings...</TabsContent>
   <TabsContent value="team">Team settings...</TabsContent>
-</Tabs>
+</TabsRoot>
 ```

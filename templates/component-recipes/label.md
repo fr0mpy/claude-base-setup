@@ -246,7 +246,7 @@ const InlineLabel = ({ className, children, ...props }: LabelProps) => (
 
 // For screen readers, hidden but accessible
 <Label htmlFor="search" className="sr-only">Search</Label>
-<Input id="search" placeholder="Search..." />
+<Input id="search" placeholder="Search…" />
 
 // Required fields should have aria-required
 <Label htmlFor="email" required>Email</Label>

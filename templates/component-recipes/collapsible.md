@@ -15,12 +15,12 @@ w-full
 
 ### Trigger
 ```
-flex items-center justify-between w-full [&[data-state=open]>svg]:rotate-180
+flex items-center justify-between w-full [&[data-open]>svg]:rotate-180
 ```
 
 ### Trigger with default styling
 ```
-flex items-center justify-between w-full py-2 font-medium
+flex items-center justify-between w-full py-2 font-body font-medium
 transition-all hover:underline
 ```
 
@@ -32,8 +32,8 @@ h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200
 ### Content
 ```
 overflow-hidden
-data-[state=closed]:animate-collapsible-up
-data-[state=open]:animate-collapsible-down
+data-closed:animate-collapsible-up
+data-open:animate-collapsible-down
 ```
 
 ### Content Inner (for padding)
@@ -46,10 +46,10 @@ pt-2 pb-4
 keyframes: {
   'collapsible-down': {
     from: { height: '0' },
-    to: { height: 'var(--radix-collapsible-content-height)' },
+    to: { height: 'var(--collapsible-content-height)' },
   },
   'collapsible-up': {
-    from: { height: 'var(--radix-collapsible-content-height)' },
+    from: { height: 'var(--collapsible-content-height)' },
     to: { height: '0' },
   },
 },
@@ -89,7 +89,7 @@ interface CollapsibleContentProps {
 - Code snippets with preview
 
 ## Do
-- Use Radix Collapsible for accessibility
+- Use Base UI Collapsible for accessibility
 - Animate height smoothly
 - Include visual indicator of state (chevron)
 - Support keyboard toggle (Enter/Space)
@@ -102,60 +102,60 @@ interface CollapsibleContentProps {
 
 ## Example
 ```tsx
-import * as CollapsiblePrimitive from '@radix-ui/react-collapsible'
+import { Collapsible } from '@base-ui-components/react/collapsible'
 import { ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-const Collapsible = CollapsiblePrimitive.Root
+const CollapsibleRoot = Collapsible.Root
 
-const CollapsibleTrigger = CollapsiblePrimitive.Trigger
+const CollapsibleTrigger = Collapsible.Trigger
 
 const CollapsibleContent = ({ className, children, ...props }) => (
-  <CollapsiblePrimitive.Content
+  <Collapsible.Panel
     className={cn(
       'overflow-hidden',
-      'data-[state=closed]:animate-collapsible-up',
-      'data-[state=open]:animate-collapsible-down',
+      'data-closed:animate-collapsible-up',
+      'data-open:animate-collapsible-down',
       className
     )}
     {...props}
   >
     {children}
-  </CollapsiblePrimitive.Content>
+  </Collapsible.Panel>
 )
 
 // Simple usage
 const SimpleCollapsible = ({ title, children }) => (
-  <Collapsible>
-    <CollapsibleTrigger className="flex items-center justify-between w-full py-2 font-medium hover:underline [&[data-state=open]>svg]:rotate-180">
+  <CollapsibleRoot>
+    <CollapsibleTrigger className="flex items-center justify-between w-full py-2 font-body font-medium hover:underline [&[data-open]>svg]:rotate-180">
       {title}
       <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
     </CollapsibleTrigger>
     <CollapsibleContent>
-      <div className="pt-2 pb-4">{children}</div>
+      <div className="pt-2 pb-4 font-body">{children}</div>
     </CollapsibleContent>
-  </Collapsible>
+  </CollapsibleRoot>
 )
 
 // With border styling
 const CollapsibleCard = ({ title, defaultOpen = false, children }) => (
-  <Collapsible defaultOpen={defaultOpen} className="rounded-lg border border-border">
-    <CollapsibleTrigger className="flex items-center justify-between w-full p-4 font-medium [&[data-state=open]>svg]:rotate-180">
+  <CollapsibleRoot defaultOpen={defaultOpen} className="rounded-lg border border-border">
+    <CollapsibleTrigger className="flex items-center justify-between w-full p-4 font-body font-medium [&[data-open]>svg]:rotate-180">
       {title}
       <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
     </CollapsibleTrigger>
     <CollapsibleContent>
-      <div className="px-4 pb-4 pt-0 border-t border-border">
+      <div className="px-4 pb-4 pt-0 border-t border-border font-body">
         {children}
       </div>
     </CollapsibleContent>
-  </Collapsible>
+  </CollapsibleRoot>
 )
 
 // Sidebar navigation example
 const SidebarGroup = ({ label, items, defaultOpen = true }) => (
-  <Collapsible defaultOpen={defaultOpen} className="space-y-2">
-    <CollapsibleTrigger className="flex items-center justify-between w-full px-2 py-1.5 text-sm font-semibold text-muted-foreground hover:text-foreground [&[data-state=open]>svg]:rotate-180">
+  <CollapsibleRoot defaultOpen={defaultOpen} className="space-y-2">
+    <CollapsibleTrigger className="flex items-center justify-between w-full px-2 py-1.5 text-sm font-semibold text-muted-foreground hover:text-foreground [&[data-open]>svg]:rotate-180">
       {label}
       <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
     </CollapsibleTrigger>
@@ -172,7 +172,7 @@ const SidebarGroup = ({ label, items, defaultOpen = true }) => (
         ))}
       </div>
     </CollapsibleContent>
-  </Collapsible>
+  </CollapsibleRoot>
 )
 
 // Code preview with expand
@@ -180,7 +180,7 @@ const CodePreview = ({ preview, code }) => {
   const [open, setOpen] = useState(false)
 
   return (
-    <Collapsible open={open} onOpenChange={setOpen}>
+    <CollapsibleRoot open={open} onOpenChange={setOpen}>
       <div className="rounded-lg border border-border">
         <div className="p-4">{preview}</div>
         <div className="border-t border-border">
@@ -195,7 +195,7 @@ const CodePreview = ({ preview, code }) => {
           </pre>
         </CollapsibleContent>
       </div>
-    </Collapsible>
+    </CollapsibleRoot>
   )
 }
 ```

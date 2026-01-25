@@ -170,7 +170,7 @@ const DotsSpinner = ({ size = 'md', className }: SpinnerProps) => (
 // Loading overlay
 const LoadingOverlay = ({
   visible,
-  label = 'Loading...',
+  label = 'Loading…',
   blur = true,
 }: LoadingOverlayProps) => {
   if (!visible) return null
@@ -202,12 +202,12 @@ const LoadingButton = ({ loading, children, ...props }) => (
 // Usage examples
 <Spinner />
 <Spinner size="lg" color="muted" />
-<Spinner size="sm" label="Loading data..." />
+<Spinner size="sm" label="Loading data…" />
 <DotsSpinner />
-<LoadingOverlay visible={isLoading} label="Saving changes..." />
+<LoadingOverlay visible={isLoading} label="Saving changes…" />
 
 <LoadingButton loading={isSubmitting}>
-  {isSubmitting ? 'Saving...' : 'Save'}
+  {isSubmitting ? 'Saving…' : 'Save'}
 </LoadingButton>
 ```
 

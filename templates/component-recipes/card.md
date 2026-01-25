@@ -19,12 +19,12 @@ flex flex-col space-y-1.5 p-{tokens.spacing.normal}
 
 ### CardTitle
 ```
-{tokens.typography.heading} text-lg text-foreground
+font-heading font-semibold text-lg text-foreground
 ```
 
 ### CardDescription
 ```
-text-sm text-muted-foreground
+font-body text-sm text-muted-foreground
 ```
 
 ### CardContent
@@ -105,13 +105,13 @@ const CardHeader = ({ className, children, ...props }) => (
 )
 
 const CardTitle = ({ className, children, ...props }) => (
-  <h3 className={cn('font-semibold text-lg text-foreground', className)} {...props}>
+  <h3 className={cn('font-heading font-semibold text-lg text-foreground', className)} {...props}>
     {children}
   </h3>
 )
 
 const CardDescription = ({ className, children, ...props }) => (
-  <p className={cn('text-sm text-muted-foreground', className)} {...props}>
+  <p className={cn('font-body text-sm text-muted-foreground', className)} {...props}>
     {children}
   </p>
 )

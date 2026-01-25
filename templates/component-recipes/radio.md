@@ -19,7 +19,7 @@ aspect-square h-4 w-4 rounded-full border border-border
 ring-offset-background
 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2
 disabled:cursor-not-allowed disabled:opacity-50
-data-[state=checked]:border-primary
+data-checked:border-primary
 ```
 
 ### Radio Indicator (inner dot)
@@ -43,7 +43,7 @@ peer-disabled:cursor-not-allowed peer-disabled:opacity-70
 ```
 flex cursor-pointer items-start space-x-3 {tokens.radius} border border-border p-4
 hover:bg-surface
-data-[state=checked]:border-primary data-[state=checked]:bg-primary/5
+data-checked:border-primary data-checked:bg-primary/5
 ```
 
 ## Props Interface
@@ -71,7 +71,7 @@ interface RadioCardProps {
 ```
 
 ## Do
-- Use Radix RadioGroup for accessibility
+- Use Base UI RadioGroup for accessibility
 - Support horizontal and vertical layouts
 - Include focus ring
 - Animate indicator appearance
@@ -85,30 +85,31 @@ interface RadioCardProps {
 
 ## Example
 ```tsx
-import * as RadioGroupPrimitive from '@radix-ui/react-radio-group'
+import { RadioGroup as RadioGroupBase } from '@base-ui/react/radio-group'
+import { Radio as RadioBase } from '@base-ui/react/radio'
 import { Circle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const RadioGroup = ({ className, ...props }) => (
-  <RadioGroupPrimitive.Root className={cn('grid gap-2', className)} {...props} />
+  <RadioGroupBase.Root className={cn('grid gap-2', className)} {...props} />
 )
 
 const RadioGroupItem = ({ className, ...props }) => (
-  <RadioGroupPrimitive.Item
+  <RadioBase.Root
     className={cn(
       'aspect-square h-4 w-4 rounded-full border border-border',
       'ring-offset-background',
       'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
       'disabled:cursor-not-allowed disabled:opacity-50',
-      'data-[state=checked]:border-primary',
+      'data-checked:border-primary',
       className
     )}
     {...props}
   >
-    <RadioGroupPrimitive.Indicator className="flex items-center justify-center">
+    <RadioBase.Indicator className="flex items-center justify-center">
       <Circle className="h-2 w-2 fill-primary text-primary" />
-    </RadioGroupPrimitive.Indicator>
-  </RadioGroupPrimitive.Item>
+    </RadioBase.Indicator>
+  </RadioBase.Root>
 )
 
 // With label
@@ -128,21 +129,21 @@ const RadioWithLabel = ({ value, label, description, id }) => (
 
 // Card style variant
 const RadioCard = ({ value, label, description }) => (
-  <RadioGroupPrimitive.Item
+  <RadioBase.Root
     value={value}
     className={cn(
       'flex cursor-pointer items-start space-x-3 rounded-lg border border-border p-4',
       'hover:bg-surface',
-      'data-[state=checked]:border-primary data-[state=checked]:bg-primary/5'
+      'data-checked:border-primary data-checked:bg-primary/5'
     )}
   >
-    <RadioGroupPrimitive.Indicator className="mt-1">
+    <RadioBase.Indicator className="mt-1">
       <Circle className="h-2 w-2 fill-primary text-primary" />
-    </RadioGroupPrimitive.Indicator>
+    </RadioBase.Indicator>
     <div>
       <p className="font-medium text-foreground">{label}</p>
       {description && <p className="text-sm text-muted-foreground">{description}</p>}
     </div>
-  </RadioGroupPrimitive.Item>
+  </RadioBase.Root>
 )
 ```

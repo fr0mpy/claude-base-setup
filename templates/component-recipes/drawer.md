@@ -12,34 +12,34 @@
 ### Overlay
 ```
 fixed inset-0 z-50 bg-black/80
-data-[state=open]:animate-in data-[state=closed]:animate-out
-data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0
+data-open:animate-in data-closed:animate-out
+data-closed:fade-out-0 data-open:fade-in-0
 ```
 
 ### Content (Base)
 ```
 fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out
-data-[state=open]:animate-in data-[state=closed]:animate-out
-data-[state=closed]:duration-300 data-[state=open]:duration-500
+data-open:animate-in data-closed:animate-out
+data-closed:duration-300 data-open:duration-500
 ```
 
 ### Position Variants
 ```
 left:
   inset-y-0 left-0 h-full w-3/4 sm:max-w-sm border-r border-border
-  data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left
+  data-closed:slide-out-to-left data-open:slide-in-from-left
 
 right:
   inset-y-0 right-0 h-full w-3/4 sm:max-w-sm border-l border-border
-  data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right
+  data-closed:slide-out-to-right data-open:slide-in-from-right
 
 top:
   inset-x-0 top-0 border-b border-border
-  data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top
+  data-closed:slide-out-to-top data-open:slide-in-from-top
 
 bottom:
   inset-x-0 bottom-0 border-t border-border
-  data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom
+  data-closed:slide-out-to-bottom data-open:slide-in-from-bottom
 ```
 
 ### Header
@@ -49,12 +49,12 @@ flex flex-col space-y-2
 
 ### Title
 ```
-text-lg font-semibold text-foreground
+font-heading text-lg font-semibold text-foreground
 ```
 
 ### Description
 ```
-text-sm text-muted-foreground
+font-body text-sm text-muted-foreground
 ```
 
 ### Footer
@@ -105,7 +105,7 @@ interface DrawerFooterProps {
 ```
 
 ## Do
-- Use Radix Dialog as base (or vaul for mobile-friendly)
+- Use Base UI Dialog as base (or vaul for mobile-friendly)
 - Trap focus within drawer when open
 - Close on Escape key
 - Close on overlay click
@@ -119,28 +119,28 @@ interface DrawerFooterProps {
 
 ## Example
 ```tsx
-import * as DialogPrimitive from '@radix-ui/react-dialog'
+import { Dialog } from '@base-ui-components/react/dialog'
 import { X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-const Drawer = DialogPrimitive.Root
-const DrawerTrigger = DialogPrimitive.Trigger
-const DrawerClose = DialogPrimitive.Close
-const DrawerPortal = DialogPrimitive.Portal
+const Drawer = Dialog.Root
+const DrawerTrigger = Dialog.Trigger
+const DrawerClose = Dialog.Close
+const DrawerPortal = Dialog.Portal
 
 const drawerSideVariants = {
-  left: 'inset-y-0 left-0 h-full w-3/4 sm:max-w-sm border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left',
-  right: 'inset-y-0 right-0 h-full w-3/4 sm:max-w-sm border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right',
-  top: 'inset-x-0 top-0 border-b data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top',
-  bottom: 'inset-x-0 bottom-0 border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom',
+  left: 'inset-y-0 left-0 h-full w-3/4 sm:max-w-sm border-r data-closed:slide-out-to-left data-open:slide-in-from-left',
+  right: 'inset-y-0 right-0 h-full w-3/4 sm:max-w-sm border-l data-closed:slide-out-to-right data-open:slide-in-from-right',
+  top: 'inset-x-0 top-0 border-b data-closed:slide-out-to-top data-open:slide-in-from-top',
+  bottom: 'inset-x-0 bottom-0 border-t data-closed:slide-out-to-bottom data-open:slide-in-from-bottom',
 }
 
 const DrawerOverlay = ({ className, ...props }) => (
-  <DialogPrimitive.Overlay
+  <Dialog.Backdrop
     className={cn(
       'fixed inset-0 z-50 bg-black/80',
-      'data-[state=open]:animate-in data-[state=closed]:animate-out',
-      'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
+      'data-open:animate-in data-closed:animate-out',
+      'data-closed:fade-out-0 data-open:fade-in-0',
       className
     )}
     {...props}
@@ -150,22 +150,22 @@ const DrawerOverlay = ({ className, ...props }) => (
 const DrawerContent = ({ side = 'right', className, children, ...props }) => (
   <DrawerPortal>
     <DrawerOverlay />
-    <DialogPrimitive.Content
+    <Dialog.Popup
       className={cn(
         'fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out',
-        'data-[state=open]:animate-in data-[state=closed]:animate-out',
-        'data-[state=closed]:duration-300 data-[state=open]:duration-500',
+        'data-open:animate-in data-closed:animate-out',
+        'data-closed:duration-300 data-open:duration-500',
         drawerSideVariants[side],
         className
       )}
       {...props}
     >
       {children}
-      <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary">
+      <Dialog.Close className="absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary">
         <X className="h-4 w-4" />
         <span className="sr-only">Close</span>
-      </DialogPrimitive.Close>
-    </DialogPrimitive.Content>
+      </Dialog.Close>
+    </Dialog.Popup>
   </DrawerPortal>
 )
 
@@ -174,15 +174,15 @@ const DrawerHeader = ({ className, ...props }) => (
 )
 
 const DrawerTitle = ({ className, ...props }) => (
-  <DialogPrimitive.Title
-    className={cn('text-lg font-semibold text-foreground', className)}
+  <Dialog.Title
+    className={cn('font-heading text-lg font-semibold text-foreground', className)}
     {...props}
   />
 )
 
 const DrawerDescription = ({ className, ...props }) => (
-  <DialogPrimitive.Description
-    className={cn('text-sm text-muted-foreground', className)}
+  <Dialog.Description
+    className={cn('font-body text-sm text-muted-foreground', className)}
     {...props}
   />
 )

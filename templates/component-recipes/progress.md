@@ -81,7 +81,7 @@ interface CircularProgressProps extends ProgressProps {
 ```
 
 ## Do
-- Use Radix Progress for accessibility
+- Use Base UI Progress for accessibility
 - Support both determinate and indeterminate states
 - Include aria-valuenow, aria-valuemin, aria-valuemax
 - Animate smoothly between values
@@ -94,7 +94,7 @@ interface CircularProgressProps extends ProgressProps {
 
 ## Example
 ```tsx
-import * as ProgressPrimitive from '@radix-ui/react-progress'
+import { Progress as ProgressBase } from '@base-ui/react/progress'
 import { cn } from '@/lib/utils'
 
 const progressVariants = {
@@ -118,7 +118,7 @@ const Progress = ({
   className,
   ...props
 }) => (
-  <ProgressPrimitive.Root
+  <ProgressBase.Root
     className={cn(
       'relative w-full overflow-hidden rounded-full bg-muted',
       progressSizes[size],
@@ -126,7 +126,7 @@ const Progress = ({
     )}
     {...props}
   >
-    <ProgressPrimitive.Indicator
+    <ProgressBase.Indicator
       className={cn(
         'h-full w-full flex-1 transition-all',
         progressVariants[variant],
@@ -134,7 +134,7 @@ const Progress = ({
       )}
       style={{ transform: value !== undefined ? `translateX(-${100 - value}%)` : undefined }}
     />
-  </ProgressPrimitive.Root>
+  </ProgressBase.Root>
 )
 
 // With label and value

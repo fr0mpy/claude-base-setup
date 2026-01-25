@@ -2,26 +2,34 @@
 
 A reusable `.claude` configuration for Claude Code projects with smart context injection, rules, agents, slash commands, and a **component styling system** for consistent UI generation.
 
+## Quick Start
+
+**Step 1: Install in your terminal**
+
+```bash
+npx claude-base-setup
+```
+
+**Step 2: Open Claude Code** (the AI coding assistant app, not your terminal)
+
+**Step 3: Type these slash commands in Claude Code's chat:**
+
+- `/setup-styling` — Claude will ask about your design preferences and generate tokens
+- `/component-harness` — Claude will scaffold a Vite preview gallery
+
+> **Note:** Slash commands like `/setup-styling` are typed into Claude Code's chat interface, not your terminal. They're prompts that Claude interprets using the templates in `.claude/commands/`.
+
+---
+
 ## Table of Contents
 
 - [Installation](#installation)
 - [CLI Options](#cli-options)
+- [Styling System](#styling-system)
 - [How It Works](#how-it-works)
 - [Rules](#rules)
 - [Agents](#agents)
-  - [Core Agents](#core-agents)
-  - [Planning & Requirements](#planning--requirements)
-  - [Code Quality](#code-quality)
-  - [Workflow](#workflow)
-  - [Session Management](#session-management)
-  - [Domain-Specific](#domain-specific)
-  - [Thinking Partners](#thinking-partners)
 - [Commands](#commands)
-- [Styling System](#styling-system)
-  - [Overview](#overview)
-  - [Quick Start](#quick-start)
-  - [Component Recipes](#component-recipes)
-  - [Visual Harness](#visual-harness)
 - [Customization](#customization)
 - [License](#license)
 
@@ -41,7 +49,9 @@ This creates a `.claude/` directory in your project with:
 | `hooks/` | Smart context injection on every prompt |
 | `rules/` | Behavioral guidelines injected into context |
 | `agents/` | Task workers for specialized operations |
-| `commands/` | Slash commands (/review, /test, /commit) |
+| `commands/` | Slash commands (`/review`, `/test`, `/commit`) |
+| `skills/` | Context-triggered knowledge (styling system) |
+| `component-recipes/` | 40 UI component templates (Base UI) |
 | `settings.json` | Hook configuration |
 
 ---
@@ -73,6 +83,93 @@ npx claude-base-setup --help
 
 ---
 
+## Styling System
+
+The styling system solves a common problem: **LLM-generated UIs are boring and samey**. This system lets you define YOUR aesthetic and have Claude consistently apply it.
+
+### Setup
+
+In Claude Code, run:
+
+```
+/setup-styling
+```
+
+You'll be asked about:
+- **Overall feel** - Minimal, Bold, Playful, Enterprise
+- **Colors** - Your brand colors or presets (monochrome, vibrant, pastels, earth tones)
+- **Typography** - Sans, serif, monospace
+- **Corners** - Sharp, subtle, rounded, pill
+- **Shadows** - Flat, subtle, pronounced, glassmorphism
+- **Density** - Compact, comfortable, spacious
+
+This generates:
+- `.claude/styling-config.json` - Your design tokens
+- `.claude/component-recipes/` - 40 component templates (using Base UI)
+
+### Preview Components
+
+```
+/component-harness
+```
+
+> **Tip:** When building components, consider running Claude Code in sandbox mode and allowing it to execute commands freely. This lets the agent iterate quickly on the preview gallery without constant permission prompts.
+
+This scaffolds a Vite + React preview gallery where you can:
+- Navigate through all 40 components
+- See each variant (primary, secondary, outline, etc.)
+- Toggle dark/light mode
+- Request changes ("make buttons more rounded")
+
+### How It Works
+
+The `styling` skill in `.claude/skills/` is automatically applied when Claude generates UI code. It:
+1. Loads your tokens from `styling-config.json`
+2. Follows recipes from `component-recipes/` (built on [Base UI](https://base-ui.com) primitives)
+3. Uses semantic colors (`bg-primary`) instead of hardcoded values (`bg-blue-500`)
+
+### Component Recipes (40 included)
+
+> Components use [Base UI](https://base-ui.com) headless primitives for accessibility, with Tailwind CSS for styling. Base UI is the spiritual successor to Radix, created by the same team with active maintenance and better performance.
+
+<details>
+<summary><strong>Form Components (10)</strong></summary>
+
+button, input, textarea, select, combobox, checkbox, radio, switch, slider, label
+</details>
+
+<details>
+<summary><strong>Layout Components (6)</strong></summary>
+
+card, separator, collapsible, accordion, tabs, table
+</details>
+
+<details>
+<summary><strong>Navigation Components (5)</strong></summary>
+
+navigation-menu, breadcrumb, pagination, dropdown-menu, context-menu
+</details>
+
+<details>
+<summary><strong>Overlay Components (6)</strong></summary>
+
+modal, dialog, drawer, popover, hover-card, tooltip
+</details>
+
+<details>
+<summary><strong>Feedback Components (5)</strong></summary>
+
+alert, toast, progress, skeleton, spinner
+</details>
+
+<details>
+<summary><strong>Display Components (4)</strong></summary>
+
+badge, avatar, carousel, toggle-group
+</details>
+
+---
+
 ## How It Works
 
 | Trigger | Action |
@@ -81,6 +178,7 @@ npx claude-base-setup --help
 | **On session start** | Checks if project context is fresh, suggests refresh if stale |
 | **Before creating code** | Suggests running `pre-code-check` agent to avoid duplicates |
 | **Before installing packages** | Suggests running `package-checker` for version compatibility |
+| **When generating UI** | Applies `styling` skill with your tokens and recipes |
 
 ---
 
@@ -93,7 +191,6 @@ npx claude-base-setup --help
 | rule-format | "rule" keywords | How to create rules |
 | subagent-format | "agent" keywords | How to create agents |
 | command-format | "command" keywords | How to create slash commands |
-| styling-system | styling/UI keywords | Enforces component recipes and design tokens |
 
 ---
 
@@ -150,7 +247,6 @@ npx claude-base-setup --help
 | accessibility-auditor | Checks UI code for a11y issues |
 | performance-profiler | Finds obvious performance issues |
 | error-boundary-designer | Suggests where to add error handling |
-| styling-auditor | Audits code against your style system |
 
 ### Thinking Partners
 
@@ -167,204 +263,11 @@ npx claude-base-setup --help
 
 | Command | Purpose |
 |---------|---------|
-| /review | Review current changes for issues |
-| /test | Run tests and fix failures |
-| /commit | Stage and commit changes |
-| /setup-styling | Interactive style interview to define your UI aesthetic |
-| /harness | Launch visual component preview gallery |
-| /audit-styling | Audit codebase for styling violations |
-
----
-
-## Styling System
-
-### Overview
-
-The styling system solves a common problem: **LLM-generated UIs are boring and samey**. Tools like Builder.io, Figma, and Lovable impose their own design language. This system lets you define YOUR aesthetic and have Claude consistently apply it.
-
-**The system has three parts:**
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                     YOUR UNIQUE AESTHETIC                        │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│   1. Style Interview        2. Component Recipes    3. Harness  │
-│   (/setup-styling)          (36 components)         (/harness)  │
-│                                                                  │
-│   ┌──────────────┐         ┌──────────────┐      ┌───────────┐  │
-│   │ Colors?      │         │ button.md    │      │  ← [□] → │  │
-│   │ Corners?     │   →     │ card.md      │  →   │  Preview  │  │
-│   │ Shadows?     │         │ input.md     │      │  Gallery  │  │
-│   │ Typography?  │         │ ...36 total  │      │           │  │
-│   └──────────────┘         └──────────────┘      └───────────┘  │
-│                                                                  │
-│   Generates config          Claude follows         Iterate      │
-│   + recipes                 these recipes          visually     │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-### Quick Start
-
-```bash
-# 1. Run the style interview
-/setup-styling
-
-# 2. Answer questions about your aesthetic:
-#    - Overall feel (minimal, bold, playful, enterprise)
-#    - Colors (your brand colors or presets)
-#    - Typography (sans, serif, mono)
-#    - Corners (sharp, subtle, rounded, pill)
-#    - Shadows (flat, subtle, pronounced)
-
-# 3. Preview your components
-/harness
-
-# 4. Iterate ("make buttons more rounded", "darker shadows")
-# 5. Audit existing code
-/audit-styling
-```
-
-### Component Recipes
-
-After setup, Claude generates `.claude/component-recipes/` with styling rules for each component. These are **prompting templates** that tell Claude exactly how to build components matching YOUR aesthetic.
-
-**36 Component Recipes Included:**
-
-<details>
-<summary><strong>Form Components (10)</strong></summary>
-
-| Recipe | Description |
-|--------|-------------|
-| [button.md](templates/component-recipes/button.md) | Buttons with variants (primary, secondary, outline, ghost) |
-| [input.md](templates/component-recipes/input.md) | Text inputs with icons, errors, sizes |
-| [textarea.md](templates/component-recipes/textarea.md) | Multi-line inputs with auto-resize, character count |
-| [select.md](templates/component-recipes/select.md) | Native-style dropdowns |
-| [combobox.md](templates/component-recipes/combobox.md) | Searchable select with filtering |
-| [checkbox.md](templates/component-recipes/checkbox.md) | Checkboxes with indeterminate state |
-| [radio.md](templates/component-recipes/radio.md) | Radio groups |
-| [switch.md](templates/component-recipes/switch.md) | Toggle switches |
-| [slider.md](templates/component-recipes/slider.md) | Range sliders with marks |
-| [label.md](templates/component-recipes/label.md) | Form labels with required/optional indicators |
-
-</details>
-
-<details>
-<summary><strong>Layout Components (6)</strong></summary>
-
-| Recipe | Description |
-|--------|-------------|
-| [card.md](templates/component-recipes/card.md) | Content containers with header/footer |
-| [separator.md](templates/component-recipes/separator.md) | Horizontal/vertical dividers |
-| [collapsible.md](templates/component-recipes/collapsible.md) | Expandable sections |
-| [accordion.md](templates/component-recipes/accordion.md) | Multiple collapsible sections |
-| [tabs.md](templates/component-recipes/tabs.md) | Tab navigation |
-| [table.md](templates/component-recipes/table.md) | Data tables with sorting |
-
-</details>
-
-<details>
-<summary><strong>Navigation Components (5)</strong></summary>
-
-| Recipe | Description |
-|--------|-------------|
-| [navigation-menu.md](templates/component-recipes/navigation-menu.md) | Header nav with mega-menu dropdowns |
-| [breadcrumb.md](templates/component-recipes/breadcrumb.md) | Page hierarchy navigation |
-| [pagination.md](templates/component-recipes/pagination.md) | Page number navigation |
-| [dropdown-menu.md](templates/component-recipes/dropdown-menu.md) | Action menus |
-| [context-menu.md](templates/component-recipes/context-menu.md) | Right-click menus |
-
-</details>
-
-<details>
-<summary><strong>Overlay Components (6)</strong></summary>
-
-| Recipe | Description |
-|--------|-------------|
-| [modal.md](templates/component-recipes/modal.md) | Dialogs/modals |
-| [dialog.md](templates/component-recipes/dialog.md) | Confirmation dialogs |
-| [drawer.md](templates/component-recipes/drawer.md) | Slide-out panels (left/right/top/bottom) |
-| [popover.md](templates/component-recipes/popover.md) | Floating content on click |
-| [hover-card.md](templates/component-recipes/hover-card.md) | Preview cards on hover |
-| [tooltip.md](templates/component-recipes/tooltip.md) | Hint text on hover |
-
-</details>
-
-<details>
-<summary><strong>Feedback Components (5)</strong></summary>
-
-| Recipe | Description |
-|--------|-------------|
-| [alert.md](templates/component-recipes/alert.md) | Status messages (info, success, warning, error) |
-| [toast.md](templates/component-recipes/toast.md) | Temporary notifications |
-| [progress.md](templates/component-recipes/progress.md) | Progress bars |
-| [skeleton.md](templates/component-recipes/skeleton.md) | Loading placeholders |
-| [spinner.md](templates/component-recipes/spinner.md) | Loading spinners |
-
-</details>
-
-<details>
-<summary><strong>Display Components (4)</strong></summary>
-
-| Recipe | Description |
-|--------|-------------|
-| [badge.md](templates/component-recipes/badge.md) | Status badges and tags |
-| [avatar.md](templates/component-recipes/avatar.md) | User avatars with fallbacks |
-| [carousel.md](templates/component-recipes/carousel.md) | Image/content sliders |
-| [toggle-group.md](templates/component-recipes/toggle-group.md) | Grouped toggle buttons |
-
-</details>
-
-**Each recipe contains:**
-
-```markdown
-# Button Component Recipe
-
-## Structure
-- What elements to use, variants, states
-
-## Tailwind Classes
-- Exact classes for base, variants, sizes
-- Uses {tokens.radius}, {tokens.colors} from your config
-
-## Props Interface
-- TypeScript interface for the component
-
-## Do / Don't
-- Best practices specific to this component
-
-## Example
-- Complete implementation code
-```
-
-### Visual Harness
-
-The harness is a live preview gallery where you can see and iterate on your components:
-
-```
-┌────────────────────────────────────────────────────────┐
-│  ←  Button (primary)  →            [Request Change]   │
-├────────────────────────────────────────────────────────┤
-│                                                        │
-│              ┌─────────────────┐                       │
-│              │   Click me      │                       │
-│              └─────────────────┘                       │
-│                                                        │
-│              ┌─────────────────┐                       │
-│              │   Secondary     │                       │
-│              └─────────────────┘                       │
-│                                                        │
-│              ┌─────────────────┐                       │
-│              │   Outline       │                       │
-│              └─────────────────┘                       │
-│                                                        │
-└────────────────────────────────────────────────────────┘
-```
-
-- **Navigate** with ← → chevrons to cycle through components
-- **Request changes** like "make it more rounded" or "add more shadow"
-- **Watch updates** in real-time with hot module replacement
+| `/review` | Review current changes for issues |
+| `/test` | Run tests and fix failures |
+| `/commit` | Stage and commit changes |
+| `/setup-styling` | Interactive style interview to define your UI aesthetic |
+| `/component-harness` | Launch visual component preview gallery |
 
 ---
 

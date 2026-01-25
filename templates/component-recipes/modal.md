@@ -12,19 +12,19 @@
 ### Overlay/Backdrop
 ```
 fixed inset-0 z-50 bg-black/50 backdrop-blur-sm
-data-[state=open]:animate-in data-[state=closed]:animate-out
-data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0
+data-open:animate-in data-closed:animate-out
+data-closed:fade-out-0 data-open:fade-in-0
 ```
 
 ### Panel/Content
 ```
 fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2
 w-full max-w-lg {tokens.radius} border border-border bg-background p-6 {tokens.shadow}
-data-[state=open]:animate-in data-[state=closed]:animate-out
-data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0
-data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95
-data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%]
-data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]
+data-open:animate-in data-closed:animate-out
+data-closed:fade-out-0 data-open:fade-in-0
+data-closed:zoom-out-95 data-open:zoom-in-95
+data-closed:slide-out-to-left-1/2 data-closed:slide-out-to-top-[48%]
+data-open:slide-in-from-left-1/2 data-open:slide-in-from-top-[48%]
 ```
 
 ### Header
@@ -34,12 +34,12 @@ flex flex-col space-y-1.5 text-center sm:text-left
 
 ### Title
 ```
-{tokens.typography.heading} text-lg text-foreground
+font-heading font-semibold text-lg text-foreground
 ```
 
 ### Description
 ```
-text-sm text-muted-foreground
+font-body text-sm text-muted-foreground
 ```
 
 ### Footer
@@ -97,7 +97,7 @@ interface ModalFooterProps {
 - Return focus to trigger element on close
 
 ## Do
-- Use Radix Dialog or similar for accessibility
+- Use Base UI Dialog for accessibility
 - Add enter/exit animations
 - Use `bg-background` for panel (not hardcoded white)
 - Include close button with icon
@@ -111,17 +111,17 @@ interface ModalFooterProps {
 
 ## Example
 ```tsx
-import * as DialogPrimitive from '@radix-ui/react-dialog'
+import { Dialog } from '@base-ui/react/dialog'
 import { X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-const Modal = DialogPrimitive.Root
-const ModalTrigger = DialogPrimitive.Trigger
+const Modal = Dialog.Root
+const ModalTrigger = Dialog.Trigger
 
 const ModalContent = ({ className, children, ...props }) => (
-  <DialogPrimitive.Portal>
-    <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm" />
-    <DialogPrimitive.Content
+  <Dialog.Portal>
+    <Dialog.Backdrop className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm" />
+    <Dialog.Popup
       className={cn(
         'fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2',
         'w-full max-w-lg rounded-lg border border-border bg-background p-6 shadow-lg',
@@ -130,11 +130,11 @@ const ModalContent = ({ className, children, ...props }) => (
       {...props}
     >
       {children}
-      <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100">
+      <Dialog.Close className="absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100">
         <X className="h-4 w-4" />
-      </DialogPrimitive.Close>
-    </DialogPrimitive.Content>
-  </DialogPrimitive.Portal>
+      </Dialog.Close>
+    </Dialog.Popup>
+  </Dialog.Portal>
 )
 
 const ModalHeader = ({ className, ...props }) => (
@@ -142,11 +142,11 @@ const ModalHeader = ({ className, ...props }) => (
 )
 
 const ModalTitle = ({ className, ...props }) => (
-  <DialogPrimitive.Title className={cn('font-semibold text-lg', className)} {...props} />
+  <Dialog.Title className={cn('font-heading font-semibold text-lg', className)} {...props} />
 )
 
 const ModalDescription = ({ className, ...props }) => (
-  <DialogPrimitive.Description className={cn('text-sm text-muted-foreground', className)} {...props} />
+  <Dialog.Description className={cn('font-body text-sm text-muted-foreground', className)} {...props} />
 )
 
 const ModalFooter = ({ className, ...props }) => (

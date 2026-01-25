@@ -20,15 +20,15 @@ group pointer-events-auto relative flex w-full items-center justify-between spac
 overflow-hidden {tokens.radius} border border-border p-4 pr-6 {tokens.shadow}
 transition-all
 data-[swipe=cancel]:translate-x-0
-data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)]
-data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)]
+data-[swipe=end]:translate-x-[var(--toast-swipe-end-x)]
+data-[swipe=move]:translate-x-[var(--toast-swipe-move-x)]
 data-[swipe=move]:transition-none
-data-[state=open]:animate-in data-[state=closed]:animate-out
+data-open:animate-in data-closed:animate-out
 data-[swipe=end]:animate-out
-data-[state=closed]:fade-out-80
-data-[state=closed]:slide-out-to-right-full
-data-[state=open]:slide-in-from-top-full
-data-[state=open]:sm:slide-in-from-bottom-full
+data-closed:fade-out-80
+data-closed:slide-out-to-right-full
+data-open:slide-in-from-top-full
+data-open:sm:slide-in-from-bottom-full
 ```
 
 ### Variants
@@ -41,12 +41,12 @@ warning:     bg-yellow-500 text-white border-yellow-600
 
 ### Title
 ```
-text-sm font-semibold [&+div]:text-xs
+font-heading text-sm font-semibold [&+div]:text-xs
 ```
 
 ### Description
 ```
-text-sm opacity-90
+font-body text-sm opacity-90
 ```
 
 ### Action Button
@@ -112,14 +112,14 @@ function useToast(): {
 
 ## Example
 ```tsx
-import * as ToastPrimitives from '@radix-ui/react-toast'
+import * as Toast from '@base-ui/react/toast'
 import { X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-const ToastProvider = ToastPrimitives.Provider
+const ToastProvider = Toast.Provider
 
 const ToastViewport = ({ className, ...props }) => (
-  <ToastPrimitives.Viewport
+  <Toast.Viewport
     className={cn(
       'fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4',
       'sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]',
@@ -128,6 +128,7 @@ const ToastViewport = ({ className, ...props }) => (
     {...props}
   />
 )
+ToastViewport.displayName = Toast.Viewport.displayName
 
 const toastVariants = {
   default: 'bg-background text-foreground border-border',
@@ -136,20 +137,20 @@ const toastVariants = {
   warning: 'bg-yellow-500 text-white border-yellow-600',
 }
 
-const Toast = ({ className, variant = 'default', ...props }) => (
-  <ToastPrimitives.Root
+const ToastRoot = ({ className, variant = 'default', ...props }) => (
+  <Toast.Root
     className={cn(
       'group pointer-events-auto relative flex w-full items-center justify-between space-x-2',
       'overflow-hidden rounded-lg border p-4 pr-6 shadow-lg transition-all',
       'data-[swipe=cancel]:translate-x-0',
-      'data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)]',
-      'data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)]',
+      'data-[swipe=end]:translate-x-[var(--toast-swipe-end-x)]',
+      'data-[swipe=move]:translate-x-[var(--toast-swipe-move-x)]',
       'data-[swipe=move]:transition-none',
-      'data-[state=open]:animate-in data-[state=closed]:animate-out',
-      'data-[swipe=end]:animate-out data-[state=closed]:fade-out-80',
-      'data-[state=closed]:slide-out-to-right-full',
-      'data-[state=open]:slide-in-from-top-full',
-      'data-[state=open]:sm:slide-in-from-bottom-full',
+      'data-open:animate-in data-closed:animate-out',
+      'data-[swipe=end]:animate-out data-closed:fade-out-80',
+      'data-closed:slide-out-to-right-full',
+      'data-open:slide-in-from-top-full',
+      'data-open:sm:slide-in-from-bottom-full',
       toastVariants[variant],
       className
     )}
@@ -158,7 +159,7 @@ const Toast = ({ className, variant = 'default', ...props }) => (
 )
 
 const ToastAction = ({ className, ...props }) => (
-  <ToastPrimitives.Action
+  <Toast.Action
     className={cn(
       'inline-flex h-8 shrink-0 items-center justify-center rounded-md',
       'border bg-transparent px-3 text-sm font-medium',
@@ -170,7 +171,7 @@ const ToastAction = ({ className, ...props }) => (
 )
 
 const ToastClose = ({ className, ...props }) => (
-  <ToastPrimitives.Close
+  <Toast.Close
     className={cn(
       'absolute right-1 top-1 rounded-md p-1 text-foreground/50',
       'opacity-0 transition-opacity hover:text-foreground',
@@ -180,15 +181,15 @@ const ToastClose = ({ className, ...props }) => (
     {...props}
   >
     <X className="h-4 w-4" />
-  </ToastPrimitives.Close>
+  </Toast.Close>
 )
 
 const ToastTitle = ({ className, ...props }) => (
-  <ToastPrimitives.Title className={cn('text-sm font-semibold', className)} {...props} />
+  <Toast.Title className={cn('font-heading text-sm font-semibold', className)} {...props} />
 )
 
 const ToastDescription = ({ className, ...props }) => (
-  <ToastPrimitives.Description className={cn('text-sm opacity-90', className)} {...props} />
+  <Toast.Description className={cn('font-body text-sm opacity-90', className)} {...props} />
 )
 
 // Usage with hook

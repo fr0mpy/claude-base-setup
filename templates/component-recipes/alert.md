@@ -26,12 +26,12 @@ destructive: bg-destructive/10 border-destructive/20 text-destructive [&>svg]:te
 
 ### Title
 ```
-mb-1 font-medium leading-none tracking-tight
+font-heading mb-1 font-medium leading-none tracking-tight
 ```
 
 ### Description
 ```
-text-sm [&_p]:leading-relaxed
+font-body text-sm [&_p]:leading-relaxed
 ```
 
 ### Dismiss Button
@@ -136,10 +136,10 @@ const Alert = ({ variant = 'default', title, onDismiss, className, children, ...
 }
 
 const AlertTitle = ({ className, ...props }) => (
-  <h5 className={cn('mb-1 font-medium leading-none tracking-tight', className)} {...props} />
+  <h5 className={cn('font-heading mb-1 font-medium leading-none tracking-tight', className)} {...props} />
 )
 
 const AlertDescription = ({ className, ...props }) => (
-  <div className={cn('text-sm [&_p]:leading-relaxed', className)} {...props} />
+  <div className={cn('font-body text-sm [&_p]:leading-relaxed', className)} {...props} />
 )
 ```

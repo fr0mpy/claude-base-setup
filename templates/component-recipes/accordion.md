@@ -15,9 +15,9 @@ border-b border-border
 
 ### Trigger
 ```
-flex flex-1 items-center justify-between py-4 text-sm font-medium
+flex flex-1 items-center justify-between py-4 font-body text-sm font-medium
 transition-all hover:underline
-[&[data-state=open]>svg]:rotate-180
+[&[data-open]>svg]:rotate-180
 ```
 
 ### Chevron Icon
@@ -27,9 +27,9 @@ h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200
 
 ### Content
 ```
-overflow-hidden text-sm
-data-[state=closed]:animate-accordion-up
-data-[state=open]:animate-accordion-down
+overflow-hidden font-body text-sm
+data-closed:animate-accordion-up
+data-open:animate-accordion-down
 ```
 
 ### Content Inner
@@ -42,10 +42,10 @@ pb-4 pt-0
 keyframes: {
   'accordion-down': {
     from: { height: '0' },
-    to: { height: 'var(--radix-accordion-content-height)' },
+    to: { height: 'var(--accordion-content-height)' },
   },
   'accordion-up': {
-    from: { height: 'var(--radix-accordion-content-height)' },
+    from: { height: 'var(--accordion-content-height)' },
     to: { height: '0' },
   },
 },
@@ -84,7 +84,7 @@ interface AccordionContentProps {
 ```
 
 ## Do
-- Use Radix Accordion for accessibility
+- Use Base UI Accordion for accessibility
 - Animate height changes smoothly
 - Rotate chevron on open
 - Support both single and multiple modes
@@ -97,46 +97,46 @@ interface AccordionContentProps {
 
 ## Example
 ```tsx
-import * as AccordionPrimitive from '@radix-ui/react-accordion'
+import { Accordion } from '@base-ui-components/react/accordion'
 import { ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-const Accordion = AccordionPrimitive.Root
+const AccordionRoot = Accordion.Root
 
 const AccordionItem = ({ className, ...props }) => (
-  <AccordionPrimitive.Item
+  <Accordion.Item
     className={cn('border-b border-border', className)}
     {...props}
   />
 )
 
 const AccordionTrigger = ({ className, children, ...props }) => (
-  <AccordionPrimitive.Header className="flex">
-    <AccordionPrimitive.Trigger
+  <Accordion.Header className="flex">
+    <Accordion.Trigger
       className={cn(
-        'flex flex-1 items-center justify-between py-4 text-sm font-medium',
-        'transition-all hover:underline [&[data-state=open]>svg]:rotate-180',
+        'flex flex-1 items-center justify-between py-4 font-body text-sm font-medium',
+        'transition-all hover:underline [&[data-open]>svg]:rotate-180',
         className
       )}
       {...props}
     >
       {children}
       <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
-    </AccordionPrimitive.Trigger>
-  </AccordionPrimitive.Header>
+    </Accordion.Trigger>
+  </Accordion.Header>
 )
 
 const AccordionContent = ({ className, children, ...props }) => (
-  <AccordionPrimitive.Content
-    className="overflow-hidden text-sm data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
+  <Accordion.Panel
+    className="overflow-hidden font-body text-sm data-closed:animate-accordion-up data-open:animate-accordion-down"
     {...props}
   >
     <div className={cn('pb-4 pt-0', className)}>{children}</div>
-  </AccordionPrimitive.Content>
+  </Accordion.Panel>
 )
 
 // Usage
-<Accordion type="single" collapsible>
+<AccordionRoot type="single" collapsible>
   <AccordionItem value="item-1">
     <AccordionTrigger>Is it accessible?</AccordionTrigger>
     <AccordionContent>
@@ -149,5 +149,5 @@ const AccordionContent = ({ className, children, ...props }) => (
       Yes. It comes with default styles that match your design system.
     </AccordionContent>
   </AccordionItem>
-</Accordion>
+</AccordionRoot>
 ```

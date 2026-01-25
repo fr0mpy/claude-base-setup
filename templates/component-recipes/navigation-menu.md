@@ -26,13 +26,13 @@ text-sm font-medium transition-colors
 hover:bg-muted hover:text-foreground
 focus:bg-muted focus:text-foreground focus:outline-none
 disabled:pointer-events-none disabled:opacity-50
-data-[state=open]:bg-muted/50
+data-open:bg-muted/50
 ```
 
 ### Trigger Indicator (Chevron)
 ```
 relative top-[1px] ml-1 h-3 w-3 transition duration-300
-group-data-[state=open]:rotate-180
+group-data-open:rotate-180
 ```
 
 ### Content
@@ -49,11 +49,11 @@ md:absolute md:w-auto
 
 ### Viewport
 ```
-origin-top-center relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)]
+origin-top-center relative mt-1.5 h-[var(--navigation-menu-viewport-height)]
 w-full overflow-hidden rounded-lg border border-border bg-popover text-popover-foreground shadow-lg
-data-[state=open]:animate-in data-[state=closed]:animate-out
-data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90
-md:w-[var(--radix-navigation-menu-viewport-width)]
+data-open:animate-in data-closed:animate-out
+data-closed:zoom-out-95 data-open:zoom-in-90
+md:w-[var(--navigation-menu-viewport-width)]
 ```
 
 ### Link
@@ -64,19 +64,19 @@ transition-colors hover:bg-muted hover:text-foreground focus:bg-muted focus:text
 
 ### Link Title
 ```
-text-sm font-medium leading-none
+font-heading text-sm font-medium leading-none
 ```
 
 ### Link Description
 ```
-line-clamp-2 text-sm leading-snug text-muted-foreground
+font-body line-clamp-2 text-sm leading-snug text-muted-foreground
 ```
 
 ### Indicator
 ```
 top-full z-[1] flex h-1.5 items-end justify-center overflow-hidden
-data-[state=visible]:animate-in data-[state=hidden]:animate-out
-data-[state=hidden]:fade-out data-[state=visible]:fade-in
+data-visible:animate-in data-hidden:animate-out
+data-hidden:fade-out data-visible:fade-in
 ```
 
 ### Indicator Arrow
@@ -123,7 +123,7 @@ interface NavigationMenuLinkProps {
 ```
 
 ## Do
-- Use Radix NavigationMenu primitive
+- Use Base UI NavigationMenu primitive
 - Support keyboard navigation (arrow keys)
 - Include proper ARIA attributes
 - Allow for mega-menu content layouts
@@ -137,12 +137,12 @@ interface NavigationMenuLinkProps {
 
 ## Example
 ```tsx
-import * as NavigationMenuPrimitive from '@radix-ui/react-navigation-menu'
+import * as NavigationMenu from '@base-ui/react/navigation-menu'
 import { ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-const NavigationMenu = ({ className, children, ...props }) => (
-  <NavigationMenuPrimitive.Root
+const NavigationMenuRoot = ({ className, children, ...props }) => (
+  <NavigationMenu.Root
     className={cn(
       'relative z-10 flex max-w-max flex-1 items-center justify-center',
       className
@@ -151,11 +151,11 @@ const NavigationMenu = ({ className, children, ...props }) => (
   >
     {children}
     <NavigationMenuViewport />
-  </NavigationMenuPrimitive.Root>
+  </NavigationMenu.Root>
 )
 
 const NavigationMenuList = ({ className, ...props }) => (
-  <NavigationMenuPrimitive.List
+  <NavigationMenu.List
     className={cn(
       'group flex flex-1 list-none items-center justify-center space-x-1',
       className
@@ -164,31 +164,31 @@ const NavigationMenuList = ({ className, ...props }) => (
   />
 )
 
-const NavigationMenuItem = NavigationMenuPrimitive.Item
+const NavigationMenuItem = NavigationMenu.Item
 
 const NavigationMenuTrigger = ({ className, children, ...props }) => (
-  <NavigationMenuPrimitive.Trigger
+  <NavigationMenu.Trigger
     className={cn(
       'group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2',
       'text-sm font-medium transition-colors',
       'hover:bg-muted hover:text-foreground',
       'focus:bg-muted focus:text-foreground focus:outline-none',
       'disabled:pointer-events-none disabled:opacity-50',
-      'data-[state=open]:bg-muted/50',
+      'data-open:bg-muted/50',
       className
     )}
     {...props}
   >
     {children}
     <ChevronDown
-      className="relative top-[1px] ml-1 h-3 w-3 transition duration-300 group-data-[state=open]:rotate-180"
+      className="relative top-[1px] ml-1 h-3 w-3 transition duration-300 group-data-open:rotate-180"
       aria-hidden="true"
     />
-  </NavigationMenuPrimitive.Trigger>
+  </NavigationMenu.Trigger>
 )
 
 const NavigationMenuContent = ({ className, ...props }) => (
-  <NavigationMenuPrimitive.Content
+  <NavigationMenu.Content
     className={cn(
       'left-0 top-0 w-full',
       'data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out',
@@ -204,19 +204,19 @@ const NavigationMenuContent = ({ className, ...props }) => (
   />
 )
 
-const NavigationMenuLink = NavigationMenuPrimitive.Link
+const NavigationMenuLink = NavigationMenu.Link
 
 const NavigationMenuViewport = ({ className, ...props }) => (
   <div className="absolute left-0 top-full flex justify-center">
-    <NavigationMenuPrimitive.Viewport
+    <NavigationMenu.Viewport
       className={cn(
         'origin-top-center relative mt-1.5',
-        'h-[var(--radix-navigation-menu-viewport-height)]',
+        'h-[var(--navigation-menu-viewport-height)]',
         'w-full overflow-hidden rounded-lg border border-border',
         'bg-popover text-popover-foreground shadow-lg',
-        'data-[state=open]:animate-in data-[state=closed]:animate-out',
-        'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90',
-        'md:w-[var(--radix-navigation-menu-viewport-width)]',
+        'data-open:animate-in data-closed:animate-out',
+        'data-closed:zoom-out-95 data-open:zoom-in-90',
+        'md:w-[var(--navigation-menu-viewport-width)]',
         className
       )}
       {...props}
@@ -225,17 +225,17 @@ const NavigationMenuViewport = ({ className, ...props }) => (
 )
 
 const NavigationMenuIndicator = ({ className, ...props }) => (
-  <NavigationMenuPrimitive.Indicator
+  <NavigationMenu.Indicator
     className={cn(
       'top-full z-[1] flex h-1.5 items-end justify-center overflow-hidden',
-      'data-[state=visible]:animate-in data-[state=hidden]:animate-out',
-      'data-[state=hidden]:fade-out data-[state=visible]:fade-in',
+      'data-visible:animate-in data-hidden:animate-out',
+      'data-hidden:fade-out data-visible:fade-in',
       className
     )}
     {...props}
   >
     <div className="relative top-[60%] h-2 w-2 rotate-45 rounded-tl-sm bg-border shadow-md" />
-  </NavigationMenuPrimitive.Indicator>
+  </NavigationMenu.Indicator>
 )
 
 // List item component for content
@@ -261,7 +261,7 @@ const ListItem = ({ className, title, children, href, ...props }) => (
 )
 
 // Usage example
-<NavigationMenu>
+<NavigationMenuRoot>
   <NavigationMenuList>
     <NavigationMenuItem>
       <NavigationMenuTrigger>Products</NavigationMenuTrigger>
@@ -306,5 +306,5 @@ const ListItem = ({ className, title, children, href, ...props }) => (
       </NavigationMenuLink>
     </NavigationMenuItem>
   </NavigationMenuList>
-</NavigationMenu>
+</NavigationMenuRoot>
 ```
