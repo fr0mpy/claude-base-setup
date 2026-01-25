@@ -1,0 +1,46 @@
+{
+  "name": "@fr0mpy/component-system",
+  "version": "2.2.0",
+  "description": "Claude Code UI styling system with design tokens, 40 Base UI component recipes, and visual harness",
+  "main": "index.js",
+  "bin": {
+    "component-system": "./bin/cli.js",
+    "validate-harness": "./bin/validate-harness.js"
+  },
+  "scripts": {
+    "test": "echo \"Tests not yet configured\""
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "ui",
+    "components",
+    "tailwind",
+    "design-tokens",
+    "styling",
+    "react"
+  ],
+  "author": "fr0mpy",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fr0mpy/claude-base-setup.git",
+    "directory": "packages/component-system"
+  },
+  "files": [
+    "bin/",
+    "templates/",
+    "index.js"
+  ],
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "peerDependencies": {
+    "@fr0mpy/prompt-system": ">=2.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@fr0mpy/prompt-system": {
+      "optional": true
+    }
+  }
+}

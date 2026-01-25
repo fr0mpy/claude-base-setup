@@ -1,0 +1,45 @@
+{
+  "name": "@fr0mpy/prompt-system",
+  "version": "2.2.0",
+  "description": "Claude Code prompt engineering system: rules, agents, hooks, and smart context injection",
+  "main": "index.js",
+  "bin": {
+    "prompt-system": "./bin/cli.js"
+  },
+  "scripts": {
+    "test": "echo \"Tests not yet configured\""
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "ai",
+    "llm",
+    "rules",
+    "agents",
+    "hooks",
+    "prompt-engineering"
+  ],
+  "author": "fr0mpy",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fr0mpy/claude-base-setup.git",
+    "directory": "packages/prompt-system"
+  },
+  "files": [
+    "bin/",
+    "templates/",
+    "index.js"
+  ],
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "peerDependencies": {
+    "@fr0mpy/component-system": ">=2.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@fr0mpy/component-system": {
+      "optional": true
+    }
+  }
+}

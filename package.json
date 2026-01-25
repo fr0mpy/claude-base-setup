@@ -1,24 +1,22 @@
 {
-  "name": "claude-base-setup",
-  "version": "1.1.0",
-  "description": "A reusable .claude configuration for Claude Code projects with smart context injection, rules, and agents",
-  "main": "index.js",
-  "bin": {
-    "claude-base-setup": "./bin/cli.js"
-  },
+  "name": "claude-tools",
+  "version": "2.2.0",
+  "private": true,
+  "description": "Claude Code tooling monorepo: prompt engineering system and UI component system",
   "scripts": {
-    "test": "node test/cli.test.js"
+    "test": "echo \"Run tests in individual packages\"",
+    "build": "echo \"No build step needed\""
   },
   "keywords": [
     "claude",
     "claude-code",
     "ai",
     "llm",
-    "development",
-    "automation",
     "rules",
     "agents",
-    "hooks"
+    "hooks",
+    "components",
+    "styling"
   ],
   "author": "fr0mpy",
   "license": "MIT",
@@ -26,12 +24,10 @@
     "type": "git",
     "url": "https://github.com/fr0mpy/claude-base-setup.git"
   },
-  "files": [
-    "bin/",
-    "templates/",
-    "index.js"
-  ],
   "engines": {
     "node": ">=16.0.0"
-  }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }
